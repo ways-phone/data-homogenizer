@@ -1,0 +1,240 @@
+<section ng-controller="SearchRecordsCtrl as vm">
+    <div class="" ng-class="{'sidebar-large': !vm.showRecords, 'sidebar-small': vm.showRecords}">
+        <ul class="sidebar-nav ">
+            <li class="smallLine">
+                <div class="form" style="padding:20px;">
+                    <button class="btn form-control btn-danger" ng-click="vm.searchRecords()"><i class="glyphicon glyphicon-search"></i></button>
+                    <div class="form-group">
+                        <label class="wide control-label">Client</label>
+                        <select class="form-control" ng-model="vm.query.Client" ng-options="client as client.Name for client in vm.clients">
+                              <option  value="">Select A Client</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="wide control-label">Campaign </label>
+                        <select class="form-control" ng-model="vm.query.Campaign" ng-options="campaign as campaign.Name for campaign in vm.query.Client.Campaigns">
+                              <option value="">Select A Campaign</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="wide control-label">File </label>
+                        <select class="form-control" ng-model="vm.query.File" ng-options="file as file.Name for file in vm.query.Campaign.Files">
+                              <option value="">Select A File</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="wide control-label">Source </label>
+                        <select class="form-control" ng-model="vm.query.Source" ng-options="source as source.DisplayName for source in vm.query.Campaign.Sources">
+                              <option  value="">Select A Source</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="wide control-label">List </label>
+                        <select class="form-control" ng-model="vm.query.List" ng-options="list as list.Name for list in vm.query.Campaign.Lists">
+                              <option value="">Select A List</option>
+                        </select>
+                    </div>
+                </div>
+            </li>
+
+        </ul>
+
+
+    </div>
+
+    <div class="container fitting">
+        <div class="row" ng-class="{'container-fitting': !vm.showRecords, 'container-hidden': vm.showRecords}">
+            <div class="col-md-3">
+                <h1 class="wide">Search <small>Records</small></h1>
+            </div>
+            <div class="col-md-3">
+                <label class="lbl wide" style="font-size:20px;">Search:  <small>{{vm.query.search.selectedField}}</small></label>
+                <span class="error">{{vm.errorMessage}} </span>
+                <div class="input-group">
+                    <input type="text" class="form-control" ng-model="vm.query.search.searchText" ng-disabled="vm.disableText" />
+
+                    <div class="input-group-btn" uib-dropdown>
+                        <button id="split-button" type="button" class="btn btn-danger dropdown-toggle" uib-dropdown-toggle><i class="glyphicon glyphicon-filter"></i></button>
+
+                        <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu>
+                            <li ng-click="vm.handle('')"><a>Clear</a></li>
+                            <li ng-click="vm.handle(field)" ng-repeat="field in vm.phone track by $index"><a>{{field}}</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li ng-click="vm.handle(field)" ng-repeat="field in vm.address track by $index"><a>{{field}}</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li ng-click="vm.handle(field)" ng-repeat="field in vm.status"><a>{{field}}</a></li>
+                        </ul>
+                    </div>
+                    <!-- /btn-group -->
+                </div>
+                <!-- /input-group -->
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-2">
+                <label class="lbl wide " style="font-size:20px;">From</label>
+                <div class="input-group">
+                    <input ng-change="vm.setDates()" type="text" class="form-control" uib-datepicker-popup ng-model="vm.query.Range.start" is-open="vm.datepicker.popup1.opened"
+                        datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="vm.datepicker.open(vm.datepicker.popup1)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <label class="lbl wide" style="font-size:20px;">To</label>
+                <div class="input-group">
+                    <input ng-change="vm.setDates()" type="text" class="form-control" uib-datepicker-popup ng-model="vm.query.Range.end" is-open="vm.datepicker.popup2.opened"
+                        datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="m.datepicker.open(vm.datepicker.popup2)"><i class="glyphicon glyphicon-calendar"></i></button>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-1"></div>
+
+
+        </div>
+        <hr/>
+    </div>
+    <div ng-show="vm.showRecords || vm.record">
+        <div class="row">
+            <div class="col-lg-12">
+                <form>
+                    <div class="input-group" ng-show="vm.showRecords && !vm.record">
+                        <div class="col-lg-12">
+                            <button class="btn btn-circle btn-lg" ng-click="vm.showSearch()"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                        <div class="col-lg-12">
+                            <label style="margin-left: -8px;" class="wide lbl">Search</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-10">
+                <form>
+                    <div class="input-group" ng-show="vm.record">
+                        <div class="col-lg-12">
+                            <button class="btn btn-circle btn-lg" ng-click="vm.record = ''"><i class="glyphicon glyphicon-backward"></i></button>
+                        </div>
+                        <div class="col-lg-12">
+                            <label style="margin-left: 2px;" class="wide lbl">Back</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-2">
+                <form>
+                    <div class="input-group" ng-show="vm.record">
+                        <div class="col-lg-12">
+                            <button class="btn btn-circle btn-lg" ng-click="vm.saveRecord()"><i class="glyphicon glyphicon-saved"></i></button>
+                        </div>
+                        <div class="col-lg-12">
+                            <label style="margin-left: 2px;" class="wide lbl">Save</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <hr/>
+    </div>
+    <div class="row animate-show-hide" ng-show="vm.records && !vm.record">
+        <form class="col-lg-2 col-lg-offset-10">
+            <input class="search-table form-control" ng-model="vm.search" placeholder="Search..." />
+        </form>
+        <div class="col-lg-12" style="overflow: auto;">
+            <table class="editable-table table-hover">
+                <thead>
+                    <tr>
+                        <th ng-click="vm.sort('CustKey')" value="CustKey" class="wide">
+                            CustKey
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='CustKey'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Source.Name')" value="Source.Name" class="wide">
+                            Source
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Source.Name'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('MobilePhone')" value="MobilePhone" class="wide">
+                            Mobile Phone
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='MobilePhone'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('HomePhone')" value="HomePhone" class="wide">
+                            Home Phone
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='HomePhone'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Title')" value="Title" class="wide">
+                            Title
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Title'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('FirstName')" value="FirstName" class="wide">
+                            First Name
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='FirstName'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('LastName')" value="LastName" class="wide">
+                            Last Name
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='LastName'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Address1')" value="Address1" class="wide">
+                            Address 1
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Address1'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Suburb')" value="Suburb" class="wide">
+                            Suburb
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Suburb'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('State')" value="State" class="wide">
+                            State
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='State'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Postcode')" value="Postcode" class="wide">
+                            Postcode
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Postcode'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Gender')" value="Gender" class="wide">
+                            Gender
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Gender'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="record in vm.records|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:10 " ng-model="vm.selected[i]"
+                        ng-click="vm.selectRecord(record)">
+                        <td>{{record.CustKey}}</td>
+                        <td>{{record.Source.DisplayName}}</td>
+                        <td>{{record.MobilePhone}}</td>
+                        <td>{{record.HomePhone}}</td>
+                        <td>{{record.Title}}</td>
+                        <td>{{record.FirstName}}</td>
+                        <td>{{record.LastName}}</td>
+                        <td>{{record.Address1}}</td>
+                        <td>{{record.Suburb}}</td>
+                        <td>{{record.State}}</td>
+                        <td>{{record.Postcode}}</td>
+                        <td>{{record.Gender}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-12">
+            <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+        </div>
+    </div>
+    <div class="row" ng-show="vm.record">
+        <div class="col-lg-12">
+
+
+            <form class="inline-form animate-show-hide">
+                <div class="form-group col-lg-3" ng-repeat="(key, value) in vm.record track by $index">
+                    <label class="lbl wide">{{key}}</label>
+                    <input class="form-control" ng-if="value.disabled" ng-model="value.value" ng-disabled="true" />
+                    <select ng-if="value.select" class="form-control" ng-model="value.bool">
+                       <option value="">Please Select an Option</option>
+                       <option ng-repeat="name in vm.options">{{name}}</option>
+                    </select>
+                    <input class="form-control" ng-if="!value.disabled && !value.select" ng-model="vm.record[key]" />
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

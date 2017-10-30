@@ -1,0 +1,268 @@
+<section ng-controller="CampaignController as vm" class="base">
+    <div ng-show="vm.isLoading">
+        <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+        </div>
+    </div>
+    <div class="animate-show-hide" ng-hide="vm.isLoading">
+        <div>
+            <div class="sidebar-wrapper" ng-class="{'sidebar-wrapper': !vm.hideMenu, 'sidebar-wrapper-small': vm.hideMenu}">
+                <ul class="sidebar-nav campaign-side">
+                    <li>
+                        <button tooltip-placement="bottom" uib-tooltip="Upload" type="button" tooltip-class="tip" ng-click="vm.nav.upload(vm)" class="btn btn-default btn-circle btn-lg  sidebar-btn"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+                    </li>
+                    <li>
+                        <button tooltip-placement="bottom" uib-tooltip="Download" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.download(vm)"
+                            class="btn btn-default btn-circle btn-lg sidebar-btn "><i class="glyphicon glyphicon-cloud-download"></i></button>
+                    </li>
+                    <li>
+                        <button tooltip-placement="bottom" uib-tooltip="Lists" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.lists(vm)"
+                            class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-folder-open"></i></button>
+                    </li>
+                    <li>
+                        <button tooltip-placement="bottom" uib-tooltip="Sources" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.sources(vm)"
+                            class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-cog"></i></button>
+                    </li>
+                    <li>
+                        <button tooltip-placement="bottom" uib-tooltip="Stats" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.stats(vm)"
+                            class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-stats"></i></button>
+                    </li>
+                    <li>
+                        <button tooltip-placement="bottom" uib-tooltip="Headers" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.headers(vm)"
+                            class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-duplicate"></i></button>
+                    </li>
+                    <li>
+                        <button tooltip-placement="bottom" uib-tooltip="Export" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exports(vm)"
+                            class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-share"></i></button>
+                    </li>
+                    <li>
+                        <button tooltip-placement="bottom" uib-tooltip="Files" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.files(vm)"
+                            class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-th-list"></i></button>
+                    </li>
+                    <li>
+                        <button tooltip-placement="bottom" uib-tooltip="Exclusions" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exclusion(vm)"
+                            class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-ban-circle"></i></button>
+                    </li>
+                </ul>
+            </div>
+            <div class="row">
+                <h1>{{vm.client.Acronym}} {{vm.campaign.Name}} <small>Contacts Req:  {{vm.count.toContact}} :: RGs Req: {{vm.count.regs}} :: Cost: ${{vm.count.cost}}</small></h1>
+            </div>
+            <div class="row">
+                <div class="panel-group">
+                    <ol class="breadcrumb">
+                        <li><a href="#!/">Clients</a></li>
+                        <li><a href="#!/{{vm.client.Acronym}}">{{vm.client.Name}}</a></li>
+                        <li class="active">{{vm.campaign.Name}}</li>
+                    </ol>
+                </div>
+            </div>
+            <!--div class="row">
+        <div class="col-md-12">
+            <div class="row btn-nav">
+                <div class="col-md-12">
+                    <div class="col-md-1 btn-group">
+                        <div class="row">
+                            <button type="button" ng-click="vm.uploadModal()" class="btn btn-default btn-circle btn-xl"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <label class="wide">Upload</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1 btn-group">
+                        <div class="row">
+                            <button type="button" ng-click="vm.downloadModal()" class="btn btn-default btn-circle btn-xl"><i class="glyphicon glyphicon-cloud-download"></i></button>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <label class="wide">Download</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1 btn-group">
+                        <div class="row">
+                            <button type="button" class="btn btn-default btn-circle btn-xl"><i class="glyphicon glyphicon-folder-open"></i></button>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <label class="wide">Lists</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1 btn-group">
+                        <div class="row">
+                            <button type="button" ng-click="vm.sourceModal()" class="btn btn-default btn-circle btn-xl"><i class="glyphicon glyphicon-cog"></i></button>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <label class="wide">Sources</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1 btn-group">
+                        <div class="row">
+                            <button type="button" class="btn btn-default btn-circle btn-xl"><i class="glyphicon glyphicon-stats"></i></button>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <label class="wide">Stats</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1 btn-group" style="text-align: center">
+                        <div class="row">
+                            <button type="button" ng-click="vm.headerModal()" class="btn btn-default btn-circle btn-xl"><i class="glyphicon glyphicon-duplicate"></i></button>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <label class="wide">Headers</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+            <div class="row">
+                <h1 class="wide">Statistics</h1>
+                <hr/>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="statinfo">
+                        <div class=col-md-6>
+                            <div class="row">
+                                <div class="btn btn-circle btn-xxl">
+                                    {{vm.campaign.ContactRate }}%
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <label class="wide">Contact Rate</label>
+                            </div>
+                        </div>
+                        <div class=col-md-6>
+                            <div class="row">
+                                <div class="btn btn-default btn-circle btn-xxl">
+                                    {{vm.campaign.Conversion}}%
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row">
+                                <label class="wide">Conversion</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="talkbubble">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h1 class="wide"> {{vm.count.Total}}</h1>
+                                <label class="wide">Records</label>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="wide">{{vm.count.Invalids}}</h1>
+                                <label class="wide">Invalids</label>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="wide"> {{vm.count.Dupes}}</h1>
+                                <label class="wide">Duplicates</label>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="wide"> {{vm.count.DupesWithinFile}}</h1>
+                                <label class="wide">Duplicates Within File</label>
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h1 data-toggle="tooltip" title="horray!" class="wide">{{vm.campaign.Files.length}}</h1>
+                                <label class="wide">Files</label>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="wide">{{vm.campaign.Sources.length}}</h1>
+                                <label class="wide">Sources</label>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="wide">{{vm.campaign.Lists.length}}</h1>
+                                <label class="wide">Lists</label>
+                            </div>
+                            <div class="col-md-3">
+                                <h1 class="wide">{{vm.count.callable}}%</h1>
+                                <label class="wide">Callable %</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col-md-12">
+                    <h2 class="wide">Tracker</h2>
+                </div>
+            </div>
+            <div class="row">
+                <form class="col-lg-2 col-lg-offset-10 ">
+                    <input class="search-table form-control " ng-model="vm.search " placeholder="Search... " />
+                </form>
+                <div class="col-md-12 " style="overflow: auto; ">
+                    <table class="editable-table table-hover ">
+                        <thead>
+                            <tr>
+                                <th ng-click="vm.sort('source')" value="source" class="wide">
+                                    Source
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='source'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('file')" value="file" class="wide">
+                                    File
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='file'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('created')" value="created" class="wide">
+                                    Uploaded
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='created'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('counts.total')" value="counts.total" class="wide">
+                                    Received
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='counts.total'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('counts.clean')" value="counts.clean" class="wide">
+                                    Loaded
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='counts.clean'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('counts.invalids')" value="counts.invalids" class="wide">
+                                    Invalids
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='counts.invalids'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('counts.dupes')" value="counts.dupes" class="wide">
+                                    Dupes
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='counts.dupes'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('counts.dupesWithinFile')" value="counts.dupesWithinFile" class="wide">
+                                    DupesWithinFile
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='counts.dupesWithinFile'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="row in vm.trackerTable|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:10 track by $index "
+                                ng-model="vm.selected[i] ">
+                                <td>{{row.source}}</td>
+                                <td>{{row.file}}</td>
+                                <td>{{row.created}}</td>
+                                <td>{{row.counts.total}}</td>
+                                <td>{{row.counts.clean}}</td>
+                                <td>{{row.counts.invalids}}</td>
+                                <td>{{row.counts.dupes}}</td>
+                                <td>{{row.counts.dupesWithinFile}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-12 ">
+                    <dir-pagination-controls max-size="5 " direction-links="true " boundary-links="true "></dir-pagination-controls>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+</section>

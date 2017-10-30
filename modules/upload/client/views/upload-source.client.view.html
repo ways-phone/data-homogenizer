@@ -1,0 +1,121 @@
+<div style="padding:7px;">
+    <a><i class="glyphicon glyphicon-remove" style="float:right" ; ng-click="vm.closeModal()"></i></a>
+</div>
+<div style="padding:40px;">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="wide">Set Sources <small> {{vm.campaign.Name}}</small></h1>
+        </div>
+        <div class="col-md-10">
+            <h3 class="wide"><small>{{vm.filename}} </small> </h3>
+        </div>
+        <div class="col-md-2">
+            <div class="btn-group">
+                <form>
+                    <button class="btn btn-circle btn-lg" ng-disabled="vm.sourcesSet" ng-click="vm.saveSourceMap()"><i class="glyphicon glyphicon-floppy-disk"></i></button>
+                    <label class="wide lbl">Save</label>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr/>
+
+    <div class="row">
+        <div class="col-md-12">
+            <p uib-alert class="alert alert-success" ng-show="vm.success" style="text-align:center;" close="vm.closeAlert()">
+                {{vm.success}}
+            </p>
+        </div>
+    </div>
+    <div ng-show="!vm.canMap && !vm.showMap">
+        <div class="row">
+            <div class="col-md-12">
+                <form class="inline-form">
+                    <div class="col-md-6">
+                        <label>Set All Sources</label>
+                        <select class="form-control" ng-model="vm.selectedSource" ng-options="source as source.DisplayName for source in vm.campaign.Sources track by source._id"></select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div ng-hide="vm.sourcesSet">
+        <div class="row" ng-show="vm.canMap">
+            <div class="col-md-12">
+                <form class="inline-form">
+                    <div class="col-md-4" ng-repeat="source in vm.existingSources">
+                        <label>{{source}}</label>
+                        <select class="form-control" ng-model="vm.sourceMapping[$index]" ng-options="source as source.DisplayName for source in vm.campaign.Sources track by source._id">
+                        </select>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <hr/>
+        <div class="row">
+            <div class="down-arrow col-md-12" ng-show="!vm.showAdd">
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-5">
+                        <button class="btn btn-lg" id="down-arrow-btn" ng-click="vm.showSource()" style="background-color: rgba(255, 255, 255, 0);">
+        <i class="glyphicon glyphicon-triangle-bottom"></i>
+        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="up-arrow col-md-12" ng-show="vm.showAdd">
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-5">
+                        <button class="btn btn-lg" id="down-arrow-btn" ng-click="vm.showSource()" style="background-color: rgba(255, 255, 255, 0);">
+         <i class="glyphicon glyphicon-triangle-top" ></i>
+        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-show="vm.showAdd">
+            <div class="">
+                <form class="inline-form" name="sourceForm" ng-submit="vm.addsource(sourceForm)" novalidate>
+
+                    <div class="col-md-3" ng-class="{'has-error' : sourceForm.name.$invalid && !sourceForm.name.$pristine}">
+                        <label>Source Name</label>
+                        <input class="form-control" name="name" placeholder="Please enter a Source Name" ng-model="vm.source.Name" required ng-pattern="/^(\w+(\s\w+)?)+$/"
+                            ng-trim="true" style="text-transform:capitalize;">
+                        <p ng-show="sourceForm.name.$invalid && !sourceForm.name.$pristine" class="help-block">Please enter only [a-z] Source Name </p>
+                    </div>
+
+                    <div class="col-md-3" ng-class="{'has-error' : sourceForm.type.$invalid && !sourceForm.type.$pristine}">
+                        <label>Source Type</label>
+                        <select class="form-control" ng-options="name for name in vm.types" ng-model="vm.source.Type">
+                        </select>
+                        <p ng-show="sourceForm.type.$invalid && !sourceForm.type.$pristine" class="help-block"></p>
+                    </div>
+
+                    <div class="col-md-3" ng-class="{'has-error' : sourceForm.provider.$invalid && !sourceForm.provider.$pristine}">
+                        <label>Provider</label>
+                        <input class="form-control" name="provider" placeholder="Please enter a Source Provider" ng-model="vm.source.Provider" required
+                            ng-pattern="/^([a-zA-z]+(\s[a-zA-z]+)?)+$/" ng-trim="true" style="text-transform:capitalize;">
+                        <p ng-show="sourceForm.provider.$invalid && !sourceForm.provider.$pristine" class="help-block">Please enter only [a-z] Provider Name </p>
+                    </div>
+
+                    <div class="col-md-2" ng-class="{'has-error' : sourceForm.cost.$invalid && !sourceForm.cost.$pristine}">
+                        <label>Source Cost</label>
+                        <input class="form-control" name="cost" placeholder="$0.00" ng-model="vm.source.Cost" required ng-pattern="/^\d+(\.+\d+)?$/"
+                            ng-trim="true">
+                        <p ng-show="sourceForm.cost.$invalid && !sourceForm.cost.$pristine" class="help-block">Please enter a cost in the format $X.XX</p>
+                    </div>
+
+                    <div class="col-md-1" style="padding-top: 15px;">
+                        <p uib-alert ng-show="vm.error" class="alert alert-danger" close="vm.closeAlert()">
+                            {{vm.error.message}}
+                        </p>
+                        <button class="btn btn-circle btn-lg form-control" ng-disabled="sourceForm.$invalid" type="submit"><i class="glyphicon glyphicon-plus"></i></button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

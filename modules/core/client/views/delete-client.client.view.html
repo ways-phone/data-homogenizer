@@ -1,0 +1,21 @@
+<div id="deleteClient">
+    <a><i class="glyphicon glyphicon-remove"  style="float:right" ng-click="vm.closeModal()"></i></a>
+    <div class="row">
+        <div class="col-lg-12" style="text-align: center; color:#a5a0a0;">
+            <h4 class="wide">Delete {{vm.client.Name}}</h4>
+        </div>
+    </div>
+    <hr/>
+    <br/>
+    <div class="row">
+        <div class="col-lg-12">
+            <div style="text-align: center;font-size: 19px;">
+                <p style="color:red;"> Are you sure you want to delete {{vm.client.Name}}?</p>
+                <br/>
+                <br/>
+            </div>
+            <div class="btn  btn-delete col-lg-6" ng-click="vm.deleteClient()"><i class="glyphicon glyphicon-ok"></i></div>
+            <div class="btn  btn-danger col-lg-6" ng-click="vm.closeModal()"><i class="glyphicon glyphicon-remove"></i></div>
+        </div>
+    </div>
+</div>

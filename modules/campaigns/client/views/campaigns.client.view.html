@@ -1,0 +1,87 @@
+<section ng-controller="ClientCtrl as vm" class="base">
+    <div class="row">
+        <div class="col-lg-12">
+            <div style="float:right">
+                <button class="btn-default btn-circle btn-xl" ng-click="vm.addCampaignModal()"><i class= "glyphicon glyphicon-plus"></i></button>
+            </div>
+            <h1>{{vm.client.Name}}<small class="wide"> ({{vm.client.Acronym}}) - {{vm.client.Type}}: {{vm.count}} Records</small></h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <ol class="breadcrumb">
+                <li><a href="#!/">Clients</a></li>
+                <li class="active">{{vm.client.Name}}</li>
+            </ol>
+        </div>
+    </div>
+    <div class="row">
+        <form class="col-lg-2 col-lg-offset-10">
+            <input class="search-table form-control" ng-model="vm.search" placeholder="Search..." />
+        </form>
+        <div class="col-lg-12" style="overflow: auto;">
+            <table class=" editable-table table-hover ">
+                <thead>
+                    <tr>
+                        <th ng-click="vm.sort('Name')" class="wide">
+                            Name
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Name'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('ContactRate')" class="wide">
+                            Contact Rate
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='ContactRate'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Conversion')" class="wide">
+                            Conversion
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Conversion'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Created')" class="wide">
+                            Created
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Created'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Creator.FullName')" class="wide">
+                            Creator
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Creator.FullName'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Files.length')" class="wide">
+                            Files
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Files.length'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Sources.length')" class="wide">
+                            Sources
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Sources.length'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Lists.length')" class="wide">
+                            Lists
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Lists.length'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th ng-click="vm.sort('Updated')" class="wide">
+                            Last Updated
+                            <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Updated'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                        </th>
+                        <th class="wide">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr dir-paginate="campaign in vm.client.Campaigns|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:5">
+                        <td ng-click="vm.openCampaignPage(campaign._id) ">{{campaign.Name}}</td>
+                        <td ng-click="vm.openCampaignPage(campaign._id) ">{{campaign.ContactRate}}%</td>
+                        <td ng-click="vm.openCampaignPage(campaign._id) ">{{campaign.Conversion}}%</td>
+                        <td ng-click="vm.openCampaignPage(campaign._id) ">{{campaign.Created}}</td>
+                        <td ng-click="vm.openCampaignPage(campaign._id) ">{{campaign.Creator.FullName}}</td>
+                        <td ng-click="vm.openCampaignPage(campaign._id) ">{{campaign.Files.length}}</td>
+                        <td ng-click="vm.openCampaignPage(campaign._id) ">{{campaign.Sources.length}}</td>
+                        <td ng-click="vm.openCampaignPage(campaign._id) ">{{campaign.Lists.length}}</td>
+                        <td ng-click="vm.openCampaignPage(campaign._id) ">{{campaign.Updated}}</td>
+                        <td>
+                            <button class="btn-default btn-circle btn-lg " ng-click="vm.editCampaignModal($index) "><i class="glyphicon glyphicon-pencil " ></i></button>
+                            <button class="btn-default btn-circle btn-lg " ng-click="vm.deleteCampaignModal($index) "><i class="glyphicon glyphicon-trash "></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-lg-12">
+            <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+        </div>
+</section>

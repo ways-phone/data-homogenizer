@@ -1,0 +1,116 @@
+<div style="padding:7px;">
+    <a><i class="glyphicon glyphicon-remove" style="float:right";  ng-click="vm.closeModal()"></i></a>
+</div>
+<div style="padding:10px;">
+    <div class="row">
+        <div class="col-lg-9 col-lg-offset-1">
+            <h1 class="wide">Search Records</h1>
+        </div>
+        <div class="col-lg-2">
+            <button class="btn btn-lg btn-circle" ng-click="vm.search()"><i class="glyphicon glyphicon-search"></i></button>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-12">
+            <form class="col-lg-5">
+                <div class="col-lg-12">
+                    <label>Client</label>
+                    <select class="form-control" ng-model="vm.client" ng-options="client as client.Acronym for client in vm.clients">
+               <option value="">Select Option</option>
+            </select>
+                </div>
+                <div class="col-lg-12">
+                    <label>Campaign</label>
+                    <select ng-change="vm.getCampaign()" class="form-control" ng-model="vm.selectedCampaign" ng-options="campaign as campaign.Name for campaign in vm.client.Campaigns">
+               <option value="">Select Option</option>
+            </select>
+                </div>
+                <div class="col-lg-12">
+                    <label>File</label>
+                    <select class="form-control" ng-model="vm.file" ng-options="file as file.Name for file in vm.campaign.Files">
+               <option value="">Select Option</option>
+            </select>
+                </div>
+                <div class="col-lg-12">
+                    <label>Source</label>
+                    <select class="form-control" ng-model="vm.source" ng-options="source as source.FullName for source in vm.campaign.Sources">
+               <option value="">Select Option</option>
+            </select>
+                </div>
+                <div class="col-lg-12">
+                    <label>List</label>
+                    <select class="form-control" ng-model="vm.list" ng-options="list as list.Name for list in vm.campaign.Lists">
+               <option value="">Select Option</option>
+            </select>
+                </div>
+            </form>
+
+            <div class="col-lg-7">
+                <form class="inline-form">
+                    <div class=" col-lg-12">
+                        <label>Search </label>
+                        <input ng-model="vm.searchValue" type="text" class=" col-lg-1 form-control" placeholder="Search Records...">
+                    </div>
+                    <div class=" col-lg-12">
+                        <label>From Date </label>
+                        <div class="input-group">
+
+                            <input ng-change="vm.setDates()" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="vm.start" is-open="vm.datepicker.popup1.opened"
+                                datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats"
+                            />
+                            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="vm.datepicker.open(vm.datepicker.popup1)"><i class="glyphicon glyphicon-calendar"></i></button>
+          </span>
+                        </div>
+                    </div>
+                    <div class=" col-lg-12">
+                        <label>To Date </label>
+                        <div class="input-group">
+                            <input ng-change="vm.setDates()" type="text" class="form-control" uib-datepicker-popup ng-model="vm.end" is-open="vm.datepicker.popup2.opened"
+                                datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="vm.datepicker.open(vm.datepicker.popup2) "><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <label> Field</label>
+                        <select ng-model="vm.selected" class="form-control">
+                                <option></option>
+                                <option ng-repeat="option in vm.searchOptions">{{option}}</option>
+                                </select>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+
+
+    </div>
+</div>
+<!--<form class="inline-form" ng-hide="vm.isLoading">
+  <div class="input-group col-lg-4">
+    <div class="input-group-btn">
+      <input ng-model="vm.searchValue" type="text" class=" col-lg-1 form-control" placeholder="SEARCH RECORDS">
+      <div class="btn-group">
+        <select ng-model="vm.range" class="form-control">
+            <option></option>
+            <option ng-repeat="option in vm.rangeOptions">{{option}}</option>
+            </select>
+          </div>
+          <div class="btn-group">
+            <select ng-model="vm.selected" class="form-control">
+                                <option></option>
+                                <option ng-repeat="option in vm.searchOptions">{{option}}</option>
+                                </select>
+          </div>
+          <div class="btn-group">
+            <button style="border-radius: 0px 5px 5px 0px;" class="btn btn-default" ng-click="vm.openSearchModal()"><i class="glyphicon glyphicon-search"></i></button>
+          </div>
+      </div>
+      <!-- /btn-group 
+  </div>
+</form>-->

@@ -1,0 +1,362 @@
+<section ng-controller="ExportCtrl as vm">
+    <div class="spinner" ng-show="vm.isLoading">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!--Main content -->
+    <div class="animate-show-hide" ng-hide="vm.isLoading">
+        <!--Side bar -->
+        <div class="sidebar-wrapper" ng-class="{'sidebar-wrapper': !vm.hideMenu, 'sidebar-wrapper-small': vm.hideMenu}">
+            <ul class="sidebar-nav campaign-side">
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Upload" type="button" tooltip-class="tip" ng-click="vm.nav.upload(vm)" class="btn btn-default btn-circle btn-lg  sidebar-btn"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Download" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.download(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn "><i class="glyphicon glyphicon-cloud-download"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Lists" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.lists(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-folder-open"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Sources" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.sources(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-cog"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Stats" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.stats(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-stats"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Headers" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.headers(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-duplicate"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Export" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exports(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-share"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Files" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.files(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-th-list"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Exclusions" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exclusion(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-ban-circle"></i></button>
+                </li>
+            </ul>
+        </div>
+        <!--Header-->
+        <div class="row">
+            <div class=" col-md-12 ">
+                <div class="col-md-1">
+                    <button style="margin-top: 13px;" class="btn btn-lg btn-circle" ng-click="vm.hideMenu = !vm.hideMenu"><i class="glyphicon glyphicon-menu-hamburger"></i> </button>
+                </div>
+                <div class="col-md-8 ">
+                    <h1 class="wide" ng-hide="vm.state.showLists"> Export
+                        <small>{{vm.client.Acronym}} - {{vm.campaign.Name}}   
+                            <h4 class="wide" ng-show="vm.state.create"> Create Dataset</h4>
+                            <h4 class="wide" ng-show="vm.state.add">Add to Dataset</h4>
+                            <h4 class="wide" ng-show="vm.state.push"> Push Records</h4>
+                        </small>
+                    </h1>
+                    <h1 class="wide" ng-show="vm.state.showLists"> Add Lists to
+                        <small>Dataset: {{vm.dataset.Name}}
+                            <h4 class="wide" ng-show="vm.state.create"> Create Dataset</h4>
+                            <h4 class="wide" ng-show="vm.state.add">Add to Dataset</h4>
+                            <h4 class="wide" ng-show="vm.state.push"> Push Records</h4>
+                        </small>
+                    </h1>
+                    <div class="panel-group">
+                        <ol class="breadcrumb">
+                            <li><a href="#!/">Clients</a></li>
+                            <li><a href="#!/client/{{vm.client.Acronym}}">{{vm.client.Name}}</a></li>
+                            <li><a href="#!/{{vm.client.Acronym}}/{{vm.campaign.Path}}">{{vm.campaign.Name}}</a></li>
+                            <li class="active">Files</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-md-3" ng-show="!vm.state.showLists">
+                    <button tooltip-placement="bottom" uib-tooltip="Create Dataset" type="button" tooltip-class="tip" type="button" class="btn btn-xl btn-circle"
+                        ng-click="vm.setState('create')"><i class=" glyphicon glyphicon-plus "></i></button>
+                    <button tooltip-placement="bottom" uib-tooltip="Add Records to Dataset" type="button" tooltip-class="tip" type="button" class="btn btn-xl btn-circle"
+                        ng-click="vm.setState('add')"><i class=" glyphicon glyphicon-wrench "></i></button>
+                    <button tooltip-placement="bottom" uib-tooltip="Push Records to ContactSpace" type="button" tooltip-class="tip" type="button"
+                        class="btn btn-xl btn-circle" ng-click="vm.setState('push')"><i class=" glyphicon glyphicon-export"></i></button>
+                </div>
+                <div class="col-md-3" ng-show="vm.state.showLists">
+                    <button tooltip-placement="bottom" uib-tooltip="Add Lists" type="button" tooltip-class="tip" class="btn btn-xl btn-circle"
+                        ng-click="vm.addListTodataset()"><i class="glyphicon glyphicon-paperclip"></i></button>
+                    <button tooltip-placement="bottom" uib-tooltip="Cancel" type="button" tooltip-class="tip" class="btn btn-xl btn-circle" ng-click="vm.setState('add')"><i class="glyphicon glyphicon-remove"></i></button>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <!--Success-->
+        <div class="row animate-show-hide" ng-show="vm.success">
+            <div class="col-md-12">
+                <div class="alert alert-success">
+                    {{vm.success}}
+                </div>
+            </div>
+        </div>
+        <!--Error-->
+        <div class="row animate-show-hide" ng-show="vm.error">
+            <div class="col-md-12 alert alert-danger">
+                {{vm.error}}
+            </div>
+        </div>
+        <!--Create Dataset-->
+        <div class="animate-show-hide" ng-if="vm.state.create">
+
+            <div class="animate-show-hide" ng-show="vm.selectedLists.length > 0">
+                <div class="row">
+                    <div class="col-md-4 col-md-offset-4">
+                        <label>Dataset Name</label>
+                        <div class="input-group">
+                            <input class="form-control" ng-model="vm.customListName " placeholder="Leave blank to use existing List Name or enter new name..."
+                            />
+                            <span class="input-group-btn">
+                        <button ng-click="vm.createDataset()" class="btn btn-danger" tooltip-placement="right" uib-tooltip="Create Dataset" type="button" tooltip-class="tip"><i class="glyphicon glyphicon-send"></i></button>
+                        </span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr/>
+            </div>
+            <div class="col-md-12 text-center">
+                <h2><small>Lists</small></h2>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <form class="col-md-2 col-md-offset-10 ">
+                        <input class="search-table form-control " ng-model="vm.search " placeholder="Search... " />
+                    </form>
+                    <div class="col-md-12 " style="overflow: auto; ">
+                        <table class=" editable-table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th ng-click="vm.sort('Name') " class="wide ">
+                                        Name
+                                        <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Name' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                    </th>
+                                    <th ng-click="vm.sort('Count') " class="wide ">
+                                        Count
+                                        <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Count' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                    </th>
+                                    <th ng-click="vm.sort('Sources.length') " class="wide ">
+                                        # of Sources
+                                        <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Sources.length' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                    </th>
+                                    <th ng-click="vm.sort( 'Files.length') " class="wide ">
+                                        # of Files
+                                        <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Files.length' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                    </th>
+                                    <th ng-click="vm.sort( 'Created') " class="wide ">
+                                        Created
+                                        <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Created' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                    </th>
+                                    <th class="wide ">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="list in vm.campaign.Lists|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:5" ng-class="{selectedRow: vm.selectedLists.indexOf(list) !== -1}">
+                                    <td>{{list.Name}}</td>
+                                    <td>{{list.Count}}</td>
+                                    <td>{{list.Sources.length}}</td>
+                                    <td>{{list.Files.length}}</td>
+                                    <td>{{list.timestamp.created}}</td>
+                                    <td>
+                                        <button ng-if="vm.selectedLists.indexOf(list) === -1" tooltip-placement="right" uib-tooltip="Add Dataset" type="button" tooltip-class="tip"
+                                            class="btn-default btn-circle btn-lg " ng-click="vm.setSelectedList(list, true)"><i style="padding-right: 2px;" class="glyphicon glyphicon-star-empty "></i></button>
+                                        <button ng-if="vm.selectedLists.indexOf(list) !== -1" tooltip-placement="right" uib-tooltip="Remove Dataset" type="button"
+                                            tooltip-class="tip" class="btn-default btn-circle btn-lg " ng-click="vm.setSelectedList(list, false)"><i style="padding-right: 2px;" class="glyphicon glyphicon-star "></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 ">
+                        <dir-pagination-controls max-size="5 " direction-links="true " boundary-links="true "></dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Add to Dataset-->
+        <div class="row animate-show-hide" ng-if="vm.state.add">
+            <div class="col-md-12 text-center">
+                <h2><small>Datasets</small></h2>
+            </div>
+            <div class="col-md-12" ng-show="vm.datasets">
+                <form class="col-md-2 col-md-offset-10 ">
+                    <input class="search-table form-control " ng-model="vm.search " placeholder="Search... " />
+                </form>
+                <div class="col-md-12 " style="overflow: auto; ">
+                    <table class=" editable-table table-hover ">
+                        <thead>
+                            <tr>
+                                <th ng-click="vm.sort('ID') " class="wide ">
+                                    Contact Space ID
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='ID' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Name') " class="wide ">
+                                    Dataset Name
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Name' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('isExported') " class="wide ">
+                                    Exported ?
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='isExported' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort( 'List.length') " class="wide ">
+                                    Number of Lists
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='List.length' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort( 'count') " class="wide ">
+                                    Records in List
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='count' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th class="wide ">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="dataset in vm.datasets|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:5 ">
+                                <td>{{dataset.ID}}</td>
+                                <td>{{dataset.Name}}</td>
+                                <td ng-if="dataset.isExported">Yes</td>
+                                <td ng-if="!dataset.isExported">No</td>
+                                <td>{{dataset.List.length}}</td>
+                                <td>{{dataset.count}}</td>
+                                <td>
+                                    <button ng-click="vm.setState('showLists', dataset)" tooltip-placement="top" uib-tooltip="Add Lists" type="button" tooltip-class="tip"
+                                        class="btn btn-circle btn-lg"><i class="glyphicon glyphicon-plus"></i></button>
+                                    <button ng-click="vm.deleteDataset(dataset)" ng-disabled="dataset.isExported" tooltip-placement="top" uib-tooltip="Delete Dataset"
+                                        type="button" tooltip-class="tip" class="btn btn-circle btn-lg"><i class="glyphicon glyphicon-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 ">
+                    <dir-pagination-controls max-size="5 " direction-links="true " boundary-links="true "></dir-pagination-controls>
+                </div>
+            </div>
+            <div class="col-md-12 text-center" ng-hide="vm.datasets">
+                <h3 class="wide"><small>No  Datasets Created</small></h3>
+            </div>
+        </div>
+        <!--Push Records-->
+        <div class="row animate-show-hide" ng-if="vm.state.push">
+            <div class="col-md-12" ng-show="vm.datasets">
+                <form class="col-md-2 col-md-offset-10 ">
+                    <input class="search-table form-control " ng-model="vm.search " placeholder="Search... " />
+                </form>
+                <div class="col-md-12 " style="overflow: auto; ">
+                    <table class=" editable-table table-hover ">
+                        <thead>
+                            <tr>
+                                <th ng-click="vm.sort('Name') " class="wide ">
+                                    Contact Space ID
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Name' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Count') " class="wide ">
+                                    Dataset Name
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Type' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Sources.length') " class="wide ">
+                                    Exported ?
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Provider' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort( 'Files.length') " class="wide ">
+                                    Number of Lists
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Cost' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort( 'Created') " class="wide ">
+                                    Records in List
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Updated' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th class="wide ">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="dataset in vm.datasets|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:5 ">
+                                <td>{{dataset.ID}}</td>
+                                <td>{{dataset.Name}}</td>
+                                <td>{{dataset.isExported}}</td>
+                                <td>{{dataset.List.length}}</td>
+                                <td>{{dataset.count}}</td>
+                                <td>
+                                    <button tooltip-placement="bottom" uib-tooltip="Push Dataset" type="button" tooltip-class="tip" class="btn btn-circle btn-lg"><i class="glyphicon glyphicon-plus"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-md-12 ">
+                    <dir-pagination-controls max-size="5 " direction-links="true " boundary-links="true "></dir-pagination-controls>
+                </div>
+            </div>
+            <div class="col-md-12 text-center" ng-hide="vm.datasets">
+                <h3 class="wide"><small>No  Datasets Created</small></h3>
+            </div>
+        </div>
+        <!--Show Lists for adding to dataset-->
+        <div class="animate-show-hide" ng-if="vm.state.showLists">
+            <!--List Table -->
+            <div class="row">
+
+                <div class="col-md-12">
+                    <form class="col-md-2 col-md-offset-10 ">
+                        <input class="search-table form-control " ng-model="vm.search " placeholder="Search... " />
+                    </form>
+                    <div class="col-md-12 " style="overflow: auto; ">
+                        <table class=" editable-table table-hover ">
+                            <thead>
+                                <tr>
+                                    <th ng-click="vm.sort('Name') " class="wide ">
+                                        Name
+                                        <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Name' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                    </th>
+                                    <th ng-click="vm.sort('Count') " class="wide ">
+                                        Count
+                                        <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Count' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                    </th>
+                                    <th ng-click="vm.sort('Sources.length') " class="wide ">
+                                        # of Sources
+                                        <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Sources.length' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                    </th>
+                                    <th ng-click="vm.sort( 'Files.length') " class="wide ">
+                                        # of Files
+                                        <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Files.length' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                    </th>
+                                    <th ng-click="vm.sort( 'Created') " class="wide ">
+                                        Created
+                                        <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Created' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                    </th>
+                                    <th class="wide ">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="list in vm.campaign.Lists|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:5" ng-class="{selectedRow: vm.selectedLists.indexOf(list) !== -1}">
+                                    <td>{{list.Name}}</td>
+                                    <td>{{list.Count}}</td>
+                                    <td>{{list.Sources.length}}</td>
+                                    <td>{{list.Files.length}}</td>
+                                    <td>{{list.timestamp.created}}</td>
+                                    <td>
+                                        <button ng-if="vm.selectedLists.indexOf(list) === -1" tooltip-placement="right" uib-tooltip="Add List" type="button" tooltip-class="tip"
+                                            class="btn-default btn-circle btn-lg " ng-click="vm.setSelectedList(list, true)"><i style="padding-right: 2px;" class="glyphicon glyphicon-star-empty "></i></button>
+                                        <button ng-if="vm.selectedLists.indexOf(list) !== -1" tooltip-placement="right" uib-tooltip="Remove List" type="button" tooltip-class="tip"
+                                            class="btn-default btn-circle btn-lg " ng-click="vm.setSelectedList(list, false)"><i style="padding-right: 2px;" class="glyphicon glyphicon-star "></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12 ">
+                        <dir-pagination-controls max-size="5 " direction-links="true " boundary-links="true "></dir-pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,294 @@
+<section ng-controller="DownloadCtrl as vm">
+    <div class="spinner" ng-show="vm.isLoading">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!--Main Section -->
+    <div class="animate-show-hide" ng-hide="vm.isLoading">
+        <!--Side Bar -->
+        <div class="sidebar-wrapper" ng-class="{'sidebar-wrapper': !vm.hideMenu, 'sidebar-wrapper-small': vm.hideMenu}">
+            <ul class="sidebar-nav campaign-side">
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Upload" type="button" tooltip-class="tip" ng-click="vm.nav.upload(vm)" class="btn btn-default btn-circle btn-lg  sidebar-btn"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Download" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.download(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn "><i class="glyphicon glyphicon-cloud-download"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Lists" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.lists(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-folder-open"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Sources" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.sources(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-cog"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Stats" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.stats(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-stats"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Headers" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.headers(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-duplicate"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Export" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exports(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-share"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" ng-disabled="vm.modalStates.Files" uib-tooltip="Files" type="button" tooltip-class="tip"
+                        type="button" ng-click="vm.nav.files(vm)" class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-th-list"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Exclusions" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exclusion(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-ban-circle"></i></button>
+                </li>
+            </ul>
+        </div>
+        <!--Header -->
+        <div class="row" ng-if="!vm.state.mapping && !vm.state.showJSONRecords && !vm.state.createSourceMaps && !vm.state.readytoUpload">
+            <div class=" col-md-12 ">
+                <div class="col-md-1">
+                    <button style="margin-top: 13px;" class="btn btn-lg btn-circle" ng-click="vm.hideMenu = !vm.hideMenu"><i class="glyphicon glyphicon-menu-hamburger"></i> </button>
+                </div>
+                <div class="col-md-6 ">
+                    <h1 class="wide "> Download <small>{{vm.client.Acronym}} - {{vm.campaign.Name}}</small></h1>
+                    <div class="panel-group">
+                        <ol class="breadcrumb">
+                            <li><a href="#!/">Clients</a></li>
+                            <li><a href="#!/client/{{vm.client.Acronym}}">{{vm.client.Name}}</a></li>
+                            <li><a href="#!/{{vm.client.Acronym}}/{{vm.campaign.Path}}">{{vm.campaign.Name}}</a></li>
+                            <li class="active">Download</li>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label style="margin-top:0px" class="wide">Download Type</label>
+                    <select class="form-control" ng-change="vm.showDownloadOptions()" ng-model="vm.selectedType" ng-options="option for option in vm.downloadOptions">
+                        <option value="">Please select A Download Type</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="wide">Record Options</label>
+                    <select class="form-control" ng-change="vm.showDownloadOptions()" ng-model="vm.selectedRecordState" ng-options="type for type in vm.recordStates">
+                    </select>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+        <!--File Download-->
+        <div class="row">
+            <div class="col-lg-12 animate-show-hide" ng-if="vm.downloadType.byFile">
+                <form class="col-lg-2 col-lg-offset-10">
+                    <input class="search-table form-control" ng-model="vm.search" placeholder="Search..." />
+                </form>
+                <div class="col-lg-12" style="overflow: auto;">
+                    <table class="editable-table table-hover">
+                        <thead>
+                            <tr>
+                                <th ng-click="vm.sort('Name')" value="CustKey" class="wide">
+                                    Name
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Name'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Source.Name')" value="Source.Name" class="wide">
+                                    Created
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Created'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Updated')" value="MobilePhone" class="wide">
+                                    Updated
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Updated'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th>
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="file in vm.campaign.Files|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:5 " ng-model="vm.selected[i]"
+                                ng-click="vm.selectRecord(record)">
+                                <td>{{file.Name}}</td>
+                                <td>{{file.Created}}</td>
+                                <td>{{file.Updated}}</td>
+                                <td>
+                                    <button class="btn btn-lg btn-circle" ng-csv="vm.download(file)" csv-header="vm.headers" filename="{{vm.filename}}" csv-column-order="vm.headers"><i class="glyphicon glyphicon-download-alt"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-12">
+                    <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+                </div>
+            </div>
+        </div>
+        <!--List Download-->
+        <div class="row">
+            <div class="col-lg-12 animate-show-hide" ng-if="vm.downloadType.byList">
+                <form class="col-lg-2 col-lg-offset-10">
+                    <input class="search-table form-control" ng-model="vm.search" placeholder="Search..." />
+                </form>
+                <div class="col-lg-12" style="overflow: auto;">
+                    <table class="editable-table table-hover">
+                        <thead>
+                            <tr>
+                                <th ng-click="vm.sort('Name')" value="CustKey" class="wide">
+                                    Name
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Name'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Count')" value="CustKey" class="wide">
+                                    Count
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Count'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Sources.length')" value="CustKey" class="wide">
+                                    # of Sources
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Sources.length'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Files.length')" value="CustKey" class="wide">
+                                    # of Files
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Files.length'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th>
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="list in vm.campaign.Lists|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:10 " ng-model="vm.selected[i]"
+                                ng-click="vm.selectRecord(record)">
+                                <td>{{list.Name}}</td>
+                                <td>{{list.Count}}</td>
+                                <td>{{list.Sources.length}}</td>
+                                <td>{{list.Files.length}}</td>
+                                <td>
+                                    <button class="btn btn-lg btn-circle" ng-csv="vm.download(list)" csv-header="vm.headers" filename="{{vm.filename}}" csv-column-order="vm.headers"><i class="glyphicon glyphicon-download-alt "></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-12 ">
+                    <dir-pagination-controls max-size="5 " direction-links="true " boundary-links="true "></dir-pagination-controls>
+                </div>
+
+
+            </div>
+        </div>
+        <!--Source Download-->
+        <div class="row ">
+            <div class="col-lg-12 animate-show-hide " ng-if="vm.downloadType.bySource ">
+                <div class="col-md-10 ">
+                    <div class="col-md-1 ">
+                        <label>From: </label>
+                    </div>
+                    <div class="form-group col-md-4 ">
+
+                        <p class="input-group ">
+                            <input type="text " class="form-control " uib-datepicker-popup ng-model="vm.start " is-open="vm.datepicker.popup1.opened "
+                                datepicker-options="dateOptions " ng-required="true " close-text="Close
+                                        " alt-input-formats="altInputFormats " />
+                            <span class="input-group-btn ">
+                                        <button type="button " class="btn btn-default " ng-click="vm.datepicker.open(vm.datepicker.popup1) "><i class="glyphicon glyphicon-calendar "></i></button>
+                                    </span>
+                        </p>
+                    </div>
+                    <div class="col-md-1 ">
+                        <label>To: </label>
+                    </div>
+
+                    <div class=" form-group col-md-4 ">
+
+                        <p class="input-group ">
+                            <input type="text " class="form-control " uib-datepicker-popup ng-model="vm.end " is-open="vm.datepicker.popup2.opened "
+                                datepicker-options="dateOptions " ng-required="true " close-text="Close " />
+                            <span class="input-group-btn ">
+                                        <button type="button " class="btn btn-default " ng-click="vm.datepicker.open(vm.datepicker.popup2) "><i class="glyphicon glyphicon-calendar "></i></button>
+                                    </span>
+                        </p>
+                    </div>
+                </div>
+                <form class="col-lg-2 ">
+                    <input class="search-table form-control " ng-model="vm.search " placeholder="Search... " />
+                </form>
+                <div class="col-lg-12 " style="overflow: auto; ">
+                    <table class="editable-table table-hover ">
+                        <thead>
+                            <tr>
+                                <th ng-click="vm.sort( 'DisplayName') " value="CustKey " class="wide ">
+                                    Name
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='DisplayName' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort( 'Provider') " value="Source.Name " class="wide ">
+                                    Provider
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Provider' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort( 'Cost') " value="MobilePhone " class="wide ">
+                                    Cost
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Cost' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th>
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="source in vm.campaign.Sources|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:10 " ng-model="vm.selected[i] "
+                                ng-click="vm.selectRecord(record) ">
+                                <td>{{source.DisplayName}}</td>
+                                <td>{{source.Provider}}</td>
+                                <td>{{source.Cost}}</td>
+                                <td>
+                                    <button class="btn btn-lg btn-circle " ng-csv="vm.download(source)" csv-header="vm.headers" filename="{{vm.filename}}" csv-column-order="vm.headers"><i class="glyphicon glyphicon-download-alt "></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-12 ">
+                    <dir-pagination-controls max-size="5 " direction-links="true " boundary-links="true "></dir-pagination-controls>
+                </div>
+
+
+            </div>
+        </div>
+        <!--Campaign Download-->
+        <div class="row ">
+            <div class="col-md-12 animate-show-hide " ng-if="vm.downloadType.byCampaign ">
+                <div class="panel panel-default ">
+                    <div class="panel-heading text-center wide " style="background-color:#cacaca; color:white; ">
+                        Download Campaign
+                    </div>
+                    <div style="background-color: #f7f7f7; " class="panel-body ">
+                        <form>
+                            <div class="input-group col-md-4 col-md-offset-4 ">
+                                <label>From Date: </label>
+                                <p class="input-group ">
+                                    <input type="text " class="form-control " uib-datepicker-popup ng-model="vm.start" is-open="vm.datepicker.popup1.opened "
+                                        datepicker-options="dateOptions " ng-required="true " close-text="Close
+                                        " alt-input-formats="altInputFormats " />
+                                    <span class="input-group-btn ">
+                                        <button type="button " class="btn btn-default " ng-click="vm.datepicker.open(vm.datepicker.popup1) "><i class="glyphicon glyphicon-calendar "></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                            <div class=" input-group col-md-4 col-md-offset-4 ">
+                                <label>To Date: </label>
+                                <p class="input-group ">
+                                    <input type="text " class="form-control " uib-datepicker-popup ng-model="vm.end " is-open="vm.datepicker.popup2.opened "
+                                        datepicker-options="dateOptions " ng-required="true " close-text="Close " />
+                                    <span class="input-group-btn ">
+                                        <button type="button " class="btn btn-default " ng-click="vm.datepicker.open(vm.datepicker.popup2) "><i class="glyphicon glyphicon-calendar "></i></button>
+                                    </span>
+                                </p>
+                            </div>
+                            <div style="margin-top:6px; " class="input group col-md-4 col-md-offset-4 ">
+                                <button style="width: 445px;margin-left: -15px; " class="btn btn-danger form-control " ng-csv="vm.download()" csv-header="vm.headers"
+                                    filename="{{vm.filename}}" csv-column-order="vm.headers" "><i class="glyphicon glyphicon-cloud-download "></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</section>

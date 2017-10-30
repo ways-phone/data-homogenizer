@@ -1,0 +1,400 @@
+<section ng-controller="UploadCtrl as vm">
+    <div class="spinner" ng-show="vm.isLoading">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!--Main content -->
+    <div class="animate-show-hide" ng-hide="vm.isLoading">
+        <!--Side bar -->
+        <div class="sidebar-wrapper" ng-class="{'sidebar-wrapper': !vm.hideMenu, 'sidebar-wrapper-small': vm.hideMenu}">
+            <ul class="sidebar-nav campaign-side">
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Upload" type="button" tooltip-class="tip" ng-click="vm.nav.upload(vm)" class="btn btn-default btn-circle btn-lg  sidebar-btn"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Download" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.download(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn "><i class="glyphicon glyphicon-cloud-download"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Lists" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.lists(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-folder-open"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Sources" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.sources(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-cog"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Stats" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.stats(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-stats"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Headers" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.headers(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-duplicate"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Export" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exports(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-share"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" ng-disabled="vm.modalStates.Files" uib-tooltip="Files" type="button" tooltip-class="tip"
+                        type="button" ng-click="vm.nav.files(vm)" class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-th-list"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Exclusions" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exclusion(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-ban-circle"></i></button>
+                </li>
+            </ul>
+        </div>
+        <!--Select File -->
+        <div class="row" ng-if="!vm.state.mapping && !vm.state.showJSONRecords && !vm.state.createSourceMaps && !vm.state.readytoUpload">
+            <div class=" col-md-12 ">
+                <div class="col-md-1">
+                    <button style="margin-top: 13px;" class="btn btn-lg btn-circle" ng-click="vm.hideMenu = !vm.hideMenu"><i class="glyphicon glyphicon-menu-hamburger"></i> </button>
+                </div>
+                <div class="col-md-9 ">
+                    <h1 class="wide "> Upload <small>{{vm.client.Acronym}} - {{vm.campaign.Name}}</small></h1>
+                    <div class="panel-group">
+                        <ol class="breadcrumb">
+                            <li><a href="#!/">Clients</a></li>
+                            <li><a href="#!/client/{{vm.client.Acronym}}">{{vm.client.Name}}</a></li>
+                            <li><a href="#!/{{vm.client.Acronym}}/{{vm.campaign.Path}}">{{vm.campaign.Name}}</a></li>
+                            <li class="active">Upload</li>
+                        </ol>
+                    </div>
+                    <h2><small>{{vm.file.name}}</small></h2>
+                </div>
+                <div class="col-md-2 ">
+                    <button tooltip-placement="bottom" uib-tooltip="Select File" type="button" tooltip-class="tip" class="btn btn-xl btn-circle "
+                        ngf-select ng-model="vm.file " name="file " ng-change="vm.uploadFileToBrowser() "><i class="glyphicon glyphicon-search "></i></button>
+                </div>
+            </div>
+
+        </div>
+        <!--Map Records-->
+        <div class="row animate-show-hide" ng-show="vm.state.mapping">
+            <div class="col-md-12">
+                <div class="col-md-1">
+                    <button style="margin-top: 13px;" class="btn btn-lg btn-circle" ng-click="vm.hideMenu = !vm.hideMenu"><i class="glyphicon glyphicon-menu-hamburger"></i> </button>
+                </div>
+                <div class="col-md-9">
+                    <h1 class="wide "> Create Mapping <small>{{vm.client.Acronym}} - {{vm.campaign.Name}}</small></h1>
+                    <div class="panel-group">
+                        <ol class="breadcrumb">
+                            <li><a href="#!/">Clients</a></li>
+                            <li><a href="#!/client/{{vm.client.Acronym}}">{{vm.client.Name}}</a></li>
+                            <li><a href="#!/{{vm.client.Acronym}}/{{vm.campaign.Path}}">{{vm.campaign.Name}}</a></li>
+                            <li class="active">Upload</li>
+                        </ol>
+                    </div>
+                    <h2><small>{{vm.file.name}}:  <em ng-show="vm.state.mapping">{{vm.originalRecords.length}} Records</em></small></h2>
+                </div>
+                <div class="col-md-2 ">
+                    <button tooltip-placement="Create Header Mapping" uib-tooltip="View Lists" type="button" tooltip-class="tip" class="btn btn-xl btn-circle "
+                        ng-disabled="!vm.completeMap" ng-click="vm.postMap() "><i class="glyphicon glyphicon glyphicon-ok "></i></button>
+                </div>
+            </div>
+        </div>
+        <!--Show mapped Records-->
+        <div class="row " ng-show="vm.state.showJSONRecords">
+            <div class="col-md-12">
+                <div class="col-md-1">
+                    <button style="margin-top: 13px;" class="btn btn-lg btn-circle" ng-click="vm.hideMenu = !vm.hideMenu"><i class="glyphicon glyphicon-menu-hamburger"></i> </button>
+                </div>
+                <div class="col-md-9">
+                    <h1 class="wide "> Mapped Records <small>{{vm.client.Acronym}} - {{vm.campaign.Name}}</small></h1>
+                    <div class="panel-group">
+                        <ol class="breadcrumb">
+                            <li><a href="#!/">Clients</a></li>
+                            <li><a href="#!/client/{{vm.client.Acronym}}">{{vm.client.Name}}</a></li>
+                            <li><a href="#!/{{vm.client.Acronym}}/{{vm.campaign.Path}}">{{vm.campaign.Name}}</a></li>
+                            <li class="active">Upload</li>
+                        </ol>
+                    </div>
+                    <h2><small>{{vm.file.name}}:  <em ng-show="vm.state.showJSONRecords">{{vm.records.length}} Records</em></small></h2>
+
+                </div>
+                <div class="col-md-2 ">
+                    <button class="btn-default btn-circle btn-xl" ng-click="vm.setSources()"><i class="glyphicon glyphicon-wrench"></i></button>
+                    <label class="lbl wide">Set Sources</label>
+                </div>
+            </div>
+        </div>
+        <!--Create Source Maps-->
+        <div class="row" ng-show="vm.state.createSourceMaps">
+            <div class="col-md-12">
+                <div class="col-md-1">
+                    <button style="margin-top: 13px;" class="btn btn-lg btn-circle" ng-click="vm.hideMenu = !vm.hideMenu"><i class="glyphicon glyphicon-menu-hamburger"></i> </button>
+                </div>
+                <div class="col-md-9">
+                    <h1 class="wide "> Create Source Maps <small>{{vm.client.Acronym}} - {{vm.campaign.Name}}</small></h1>
+                    <h2><small>{{vm.file.name}}:  <em ng-show="vm.state.createSourceMaps">{{vm.records.length}} Records</em></small>
+
+                    </h2>
+                </div>
+                <div class="col-md-2 ">
+                    <button tooltip-placement="Save Source Maps" uib-tooltip="View Lists" type="button" tooltip-class="tip" class="btn btn-circle btn-xl"
+                        ng-click="vm.saveSourceMap()">
+                    <i class="glyphicon glyphicon-floppy-disk"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-11 col-md-offset-1">
+                <div class="panel-group">
+                    <ol class="breadcrumb">
+                        <li><a href="#!/">Clients</a></li>
+                        <li><a href="#!/client/{{vm.client.Acronym}}">{{vm.client.Name}}</a></li>
+                        <li><a href="#!/{{vm.client.Acronym}}/{{vm.campaign.Path}}">{{vm.campaign.Name}}</a></li>
+                        <li class="active">Upload</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <!--Upload File to Server-->
+        <div class="row" ng-show="vm.state.readytoUpload">
+            <div class="col-md-12">
+                <div class="col-md-1">
+                    <button style="margin-top: 13px;" class="btn btn-lg btn-circle" ng-click="vm.hideMenu = !vm.hideMenu"><i class="glyphicon glyphicon-menu-hamburger"></i> </button>
+                </div>
+                <div class="col-md-10">
+                    <h1 class="wide "> Upload Records <small>{{vm.client.Acronym}} - {{vm.campaign.Name}}</small></h1>
+                    <h2><small>{{vm.file.name}}:  <em ng-show="vm.state.createSourceMaps">{{vm.records.length}} Records</em></small>
+
+                    </h2>
+                </div>
+                <div class="col-md-1 ">
+                    <button tooltip-placement="bottom" uib-tooltip="Upload Records" type="button" tooltip-class="tip" class="btn btn-circle btn-xl"
+                        ng-click="vm.submitRecords()"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+                </div>
+                <div class="col-md-11 col-md-offset-1">
+                    <div class="panel-group">
+                        <ol class="breadcrumb">
+                            <li><a href="#!/">Clients</a></li>
+                            <li><a href="#!/client/{{vm.client.Acronym}}">{{vm.client.Name}}</a></li>
+                            <li><a href="#!/{{vm.client.Acronym}}/{{vm.campaign.Path}}">{{vm.campaign.Name}}</a></li>
+                            <li class="active">Upload</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <!--Error / Success Messages -->
+        <div class="row">
+            <div class="col-md-12" ng-show="vm.errorMessage">
+                <div class="alert alert-danger">
+                    {{vm.errorMessage}}
+                </div>
+            </div>
+            <div class="col-md-12" ng-show="vm.success">
+                <div class="alert alert-success">
+                    {{vm.success}}
+                </div>
+            </div>
+        </div>
+        <!--Create Header Map Table -->
+        <div class="row animate-show-hide" ng-show="vm.state.mapping ">
+            <form class="col-lg-2 col-lg-offset-10 ">
+                <input class="search-table form-control " ng-model="vm.search " placeholder="Search... " />
+            </form>
+            <div class="col-md-12 " style="overflow: auto; ">
+                <table class="editable-table table-hover ">
+                    <thead>
+                        <tr>
+                            <th ng-repeat="header in vm.originalHeader track by $index ">
+                                <select class="form-control " ng-model="vm.selectedHeaders[$index]" ng-change="vm.checkMapIsComplete()" ng-options="header for header in vm.universalHeaders "></select>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th style="min-width: 25vh" ng-repeat="header in vm.originalHeader track by $index ">
+                                {{header}}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="record in vm.originalRecords|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:10 track by $index "
+                            ng-model="vm.selected[i] ">
+                            <td style="min-width: 25vh" ng-repeat="cell in record track by $index ">{{cell}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-12 ">
+                <dir-pagination-controls max-size="5 " direction-links="true " boundary-links="true "></dir-pagination-controls>
+            </div>
+        </div>
+        <!--Mapped Data Table-->
+        <div class="row animate-show-hide" ng-show="(vm.state.showJSONRecords && !vm.state.createSourceMaps) || vm.state.readytoUpload">
+            <div class="row" ng-show="vm.records && !vm.record">
+                <form class="col-lg-2 col-lg-offset-10">
+                    <input class="search-table form-control" ng-model="vm.search" placeholder="Search..." />
+                </form>
+                <div class="col-lg-12" style="overflow: auto;">
+                    <table class="editable-table table-hover">
+                        <thead>
+                            <tr>
+                                <th ng-click="vm.sort('CustKey')" value="CustKey" class="wide">
+                                    CustKey
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='CustKey'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Source.DisplayName')" value="Source.DisplayName" class="wide">
+                                    Source
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Source.DisplayName'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('MobilePhone')" value="MobilePhone" class="wide">
+                                    Mobile Phone
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='MobilePhone'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('HomePhone')" value="HomePhone" class="wide">
+                                    Home Phone
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='HomePhone'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Title')" value="Title" class="wide">
+                                    Title
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Title'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('FirstName')" value="FirstName" class="wide">
+                                    First Name
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='FirstName'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('LastName')" value="LastName" class="wide">
+                                    Last Name
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='LastName'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Address1')" value="Address1" class="wide">
+                                    Address 1
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Address1'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Suburb')" value="Suburb" class="wide">
+                                    Suburb
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Suburb'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('State')" value="State" class="wide">
+                                    State
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='State'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Postcode')" value="Postcode" class="wide">
+                                    Postcode
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Postcode'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th ng-click="vm.sort('Gender')" value="Postcode" class="wide">
+                                    Gender
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Gender'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="record in vm.records|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:10 " ng-model="vm.selected[i]"
+                                ng-click="vm.selectRecord(record)">
+                                <td>{{record.CustKey}}</td>
+                                <td>{{record.Source.DisplayName}}</td>
+                                <td>{{record.MobilePhone}}</td>
+                                <td>{{record.HomePhone}}</td>
+                                <td>{{record.Title}}</td>
+                                <td>{{record.FirstName}}</td>
+                                <td>{{record.LastName}}</td>
+                                <td>{{record.Address1}}</td>
+                                <td>{{record.Suburb}}</td>
+                                <td>{{record.State}}</td>
+                                <td>{{record.Postcode}}</td>
+                                <td>{{record.Gender}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-lg-12">
+                    <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true"></dir-pagination-controls>
+                </div>
+            </div>
+        </div>
+        <!--Create Source Maps -->
+        <div class="animate-show-hide" ng-show="vm.state.createSourceMaps && !vm.state.readytoUpload">
+
+            <div ng-show="!vm.canMap && !vm.showMap">
+                <div class="row">
+                    <div class="col-md-12">
+                        <form class="inline-form">
+                            <div class="col-md-6">
+                                <label>Set All Sources</label>
+                                <select class="form-control" ng-model="vm.selectedSource" ng-options="source as source.DisplayName for source in vm.campaign.Sources track by source._id"></select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div ng-hide="vm.sourcesSet">
+                <div class="row" ng-show="vm.canMap">
+                    <div class="col-md-12">
+                        <form class="inline-form">
+                            <div class="col-md-4" ng-repeat="source in vm.existingSources">
+                                <label>{{source}}</label>
+                                <select class="form-control" ng-model="vm.sourceMapping[$index]" ng-options="source as source.DisplayName for source in vm.campaign.Sources track by source._id">
+                        </select>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="down-arrow col-md-12" ng-show="!vm.showAdd">
+                        <div class="row">
+                            <div class="col-md-2 col-md-offset-5">
+                                <button class="btn btn-lg" id="down-arrow-btn" ng-click="vm.showAdd = !vm.showAdd" style="background-color: rgba(255, 255, 255, 0);"><i class="glyphicon glyphicon-triangle-bottom"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="up-arrow col-md-12" ng-show="vm.showAdd">
+                        <div class="row">
+                            <div class="col-md-2 col-md-offset-5">
+                                <button class="btn btn-lg" id="down-arrow-btn" ng-click="vm.showAdd = !vm.showAdd" style="background-color: rgba(255, 255, 255, 0);"><i class="glyphicon glyphicon-triangle-top" ></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-show="vm.showAdd">
+                    <div class="">
+                        <form class="inline-form" name="sourceForm" ng-submit="vm.addsource(sourceForm)" novalidate>
+
+                            <div class="col-md-3" ng-class="{'has-error' : sourceForm.name.$invalid && !sourceForm.name.$pristine}">
+                                <label>Source Name</label>
+                                <input class="form-control" name="name" placeholder="Please enter a Source Name" ng-model="vm.source.Name" required ng-pattern="/^(\w+(\s\w+)?)+$/"
+                                    ng-trim="true" style="text-transform:capitalize;">
+                                <p ng-show="sourceForm.name.$invalid && !sourceForm.name.$pristine" class="help-block">Please enter only [a-z] Source Name </p>
+                            </div>
+
+                            <div class="col-md-3" ng-class="{'has-error' : sourceForm.type.$invalid && !sourceForm.type.$pristine}">
+                                <label>Source Type</label>
+                                <select class="form-control" ng-options="name for name in vm.types" ng-model="vm.source.Type">
+                        </select>
+                                <p ng-show="sourceForm.type.$invalid && !sourceForm.type.$pristine" class="help-block"></p>
+                            </div>
+
+                            <div class="col-md-3" ng-class="{'has-error' : sourceForm.provider.$invalid && !sourceForm.provider.$pristine}">
+                                <label>Provider</label>
+                                <input class="form-control" name="provider" placeholder="Please enter a Source Provider" ng-model="vm.source.Provider" required
+                                    ng-pattern="/^([a-zA-z]+(\s[a-zA-z]+)?)+$/" ng-trim="true" style="text-transform:capitalize;">
+                                <p ng-show="sourceForm.provider.$invalid && !sourceForm.provider.$pristine" class="help-block">Please enter only [a-z] Provider Name </p>
+                            </div>
+
+                            <div class="col-md-2" ng-class="{'has-error' : sourceForm.cost.$invalid && !sourceForm.cost.$pristine}">
+                                <label>Source Cost</label>
+                                <input class="form-control" name="cost" placeholder="$0.00" ng-model="vm.source.Cost" required ng-pattern="/^\d+(\.+\d+)?$/"
+                                    ng-trim="true">
+                                <p ng-show="sourceForm.cost.$invalid && !sourceForm.cost.$pristine" class="help-block">Please enter a cost in the format $X.XX</p>
+                            </div>
+
+                            <div class="col-md-1" style="padding-top: 15px;">
+                                <p uib-alert ng-show="vm.error" class="alert alert-danger" close="vm.closeAlert()">
+                                    {{vm.error.message}}
+                                </p>
+                                <button class="btn btn-circle btn-lg form-control" ng-disabled="sourceForm.$invalid" type="submit"><i class="glyphicon glyphicon-plus"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

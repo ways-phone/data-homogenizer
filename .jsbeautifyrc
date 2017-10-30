@@ -1,0 +1,11 @@
+{
+    "tab_size": 4,
+    "indent_size": 4,
+    "space_in_paren": true,
+    "brace_style": "end-expand,preserve-inline",
+    "wrap_line_length": 100,
+    "break-chained-methods": true,
+    "space_after_anon_function": true,
+    "space_before_conditional": true
+
+}

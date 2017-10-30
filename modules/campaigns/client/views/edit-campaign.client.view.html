@@ -1,0 +1,40 @@
+<div id="addClient">
+    <a><i class="glyphicon glyphicon-remove" style="float:right";  ng-click="vm.closeModal()"></i></a>
+    <div class="row panel-title">
+        <div class="col-lg-12" style="text-align: center; color: #a5a0a0;">
+            <h4 class="wide">Edit {{vm.campaign.Name}}</h4>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2">
+            <form name="campaignForm" ng-submit="vm.updateCampaign()" novalidate>
+                <div class="form-group col-lg-12" ng-class="{'has-error' : campaignForm.name.$invalid && !campaignForm.name.$pristine}">
+                    <label>Campaign Name</label>
+                    <input class="form-control" name="name" placeholder="Please enter a Campaign Name" ng-model="vm.campaign.Name" required ng-pattern="/^([a-zA-z]+(\s[a-zA-z]+)?)+$/"
+                        ng-trim="true" style="text-transform:capitalize;">
+                    <p ng-show="campaignForm.name.$invalid && !campaignForm.name.$pristine" class="help-block">Please enter only [a-z] Name </p>
+                </div>
+                <div class="form-group col-lg-12" ng-class="{'has-error' : campaignForm.conversion.$invalid && !campaignForm.conversion.$pristine}">
+                    <label>Conversion Target</label>
+                    <input class="form-control" name="conversion" placeholder="0%" ng-model="vm.campaign.Conversion" required ng-pattern="/^[1-9]{1}[0-9]*(\.\d+)?$/"
+                        ng-trim="true">
+                    <p ng-show="campaignForm.conversion.$invalid && !campaignForm.conversion.$pristine" class="help-block">Please enter a Percentage i.e. 4</p>
+                </div>
+                <div class="form-group col-lg-12" ng-class="{'has-error' : campaignForm.contactRate.$invalid && !campaignForm.contactRate.$pristine}">
+                    <label>Contact Rate Target</label>
+                    <input class="form-control" name="contactRate" placeholder="0%" ng-model="vm.campaign.ContactRate" required ng-pattern="/^\d+$/"
+                        ng-trim="true">
+                    <p ng-show="campaignForm.contactRate.$invalid && !campaignForm.contactRate.$pristine" class="help-block">Please enter a Percentage i.e. 4</p>
+                </div>
+                <div class="form-group col-lg-12">
+                    <label></label>
+                    <p uib-alert ng-show="vm.error" class="alert alert-danger" close="vm.closeAlert()">
+                        {{vm.error.message}}
+                    </p>
+                    <button class="btn btn-enter form-control" ng-disabled="campaignForm.$invalid" type="submit"><i class="glyphicon glyphicon-plus"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

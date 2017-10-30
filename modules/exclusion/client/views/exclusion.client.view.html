@@ -1,0 +1,75 @@
+<section ng-controller="ExclusionController as vm">
+    <div class="spinner" ng-show="vm.isLoading">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!--Main content -->
+    <div class="animate-show-hide" ng-hide="vm.isLoading">
+        <!--Side bar -->
+        <div class="sidebar-wrapper" ng-class="{'sidebar-wrapper': !vm.hideMenu, 'sidebar-wrapper-small': vm.hideMenu}">
+            <ul class="sidebar-nav campaign-side">
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Upload" type="button" tooltip-class="tip" ng-click="vm.nav.upload(vm)" class="btn btn-default btn-circle btn-lg  sidebar-btn"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Download" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.download(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn "><i class="glyphicon glyphicon-cloud-download"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Lists" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.lists(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-folder-open"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Sources" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.sources(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-cog"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Stats" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.stats(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-stats"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Headers" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.headers(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-duplicate"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Export" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exports(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-share"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Files" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.files(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-th-list"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Exclusions" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exclusion(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-ban-circle"></i></button>
+                </li>
+            </ul>
+        </div>
+        <!-- Header -->
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="wide">Exclusion List</h2>
+            </div>
+            <div class="col-md-2 ">
+                <button tooltip-placement="bottom" uib-tooltip="Select File" type="button" tooltip-class="tip" class="btn btn-xl btn-circle "
+                    ngf-select ng-model="vm.file " name="file " ng-change="vm.uploadFileToBrowser() "><i class="glyphicon glyphicon-search "></i></button>
+            </div>
+        </div>
+    </div>
+    <!--Success-->
+    <div class="row animate-show-hide" ng-show="vm.success">
+        <div class="col-md-12">
+            <div class="alert alert-success">
+                {{vm.success}}
+            </div>
+        </div>
+    </div>
+    <!--Error-->
+    <div class="row animate-show-hide" ng-show="vm.error">
+        <div class="col-md-12 alert alert-danger">
+            {{vm.error}}
+        </div>
+    </div>
+    <hr/>
+</section>

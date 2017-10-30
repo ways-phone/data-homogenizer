@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WAYS File Uploader</title>
+    <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap/dist/css/bootstrap.css"> 
+    <link rel="shortcut icon" href="ways.ico" type="image/x-icon">
+    <link rel="icon" href="ways.ico" type="image/x-icon">   
+    <link href="/css/all.css" rel="stylesheet">
+</head>
+
+<body class="wrapper">
+    <div ng-controller="SearchController as vm">
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="col-lg-5">
+                <a id="MainTitle" href="/#!/"><h4 style="color:white; letter-spacing:2px; padding-left:20px; padding-top:5px;"> WAYS FILE UPLOADER </h4></a>
+            </div>
+            <div class="col-lg-2">
+            <select style="margin-top: 7px;" ng-change="vm.redirectToCampaign()" ng-if="vm.isAuthenticated"  class="form-control" ng-model="vm.campaign" ng-options="campaign as campaign.DisplayName for campaign in vm.campaigns | orderBy:'DisplayName'">
+                <option value="">Go to campaign</option>
+                </select>
+            </div>
+            <div class="col-lg-3"></div>
+            <div class="col-lg-2" style="margin-top: 15px;">
+                <a target="_self"  class="wide" ng-if="vm.isAuthenticated" style=" color:white; font-size:15px;margin-left: 39px;" ng-click="vm.search()">Search</a>
+                <a target="_self"  class="wide" ng-if="vm.isAuthenticated" style=" color:white; font-size:15px;margin-left: 39px;" ng-click="vm.logout()">Logout</a>
+            </div>
+        </nav>
+        <div class="btn-group" uib-dropdown is-open="status.isopen">
+            <button id="single-button" type="button" class="btn btn-default" uib-dropdown-toggle ng-disabled="disabled">
+                Search By ... <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+                <li role="menuitem" ng-repeat="option in vm.searchOptions"><a href="">{{option}}</a></li>
+                <li class="divider"></li>
+                <li role="menuitem"><label>Last Week </label><input type="checkbox"/></li>
+            </ul>
+        </div>
+        <div class="container-fluid half">
+            <div style="padding:80px; width:100%; max-height: 100vh;" class="container-fluid">
+                <section ng-hide="vm.isLoading" ng-view>
+                </section>
+                <div class="spinner" ng-show="vm.isLoading">
+                    <div class="bounce1"></div>
+                    <div class="bounce2"></div>
+                    <div class="bounce3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+<script type="application/javascript" src="/bower_components/angular/angular.js"></script>
+<script type="application/javascript" src="/bower_components/angular-route/angular-route.js"></script>
+<script type="application/javascript" src="/bower_components/angular-resource/angular-resource.js"></script>
+<script type="application/javascript" src="/bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+<script type="application/javascript" src="/bower_components/angularUtils-pagination/dirPagination.js"></script>
+<script type="application/javascript" src="/bower_components/isteven-angular-multiselect/isteven-multi-select.js"></script>
+<script type="application/javascript" src="/bower_components/angular-animate/angular-animate.min.js"></script>
+
+<script type="text/javascript" src="/core/client/app/config.js"></script>
+<script type="text/javascript" src="/core/client/app/init.js"></script>
+
+<script type="text/javascript" src="/core/client/core.client.module.js"></script>
+<script type="text/javascript" src="/core/client/config/core.client.routes.js"></script>
+
+<script type="text/javascript" src="/search/client/search.client.module.js"></script>
+<script type="text/javascript" src="/search/client/services/search.client.service.js"></script>
+<script type="text/javascript" src="/search/client/controllers/search.client.controller.js"></script>
+
+<script type="text/javascript" src="/authentication/client/authentication.client.module.js"></script>
+<script type="text/javascript" src="/authentication/client/config/register.client.routes.js"></script>
+<script type="text/javascript" src="/authentication/client/config/login.client.routes.js"></script>
+<script type="text/javascript" src="/authentication/client/services/authentication.client.service.js"></script>
+<script type="text/javascript" src="/authentication/client/controllers/login.client.controller.js"></script>
+<script type="text/javascript" src="/authentication/client/controllers/register.client.controller.js"></script>
+
+<script type="text/javascript" src="/core/client/directives/new-table.client.directive.js"></script>
+<script type="text/javascript" src="/core/client/directives/row.client.directive.js"></script>
+
+<script type="text/javascript" src="/core/client/services/datepicker.client.service.js"></script>
+<script type="text/javascript" src="/core/client/services/core.client.service.js"></script>
+<script type="text/javascript" src="/core/client/services/date.client.service.js"></script>
+<script type="text/javascript" src="/core/client/services/modal.client.service.js"></script>
+<script type="text/javascript" src="/core/client/services/general.client.service.js"></script>
+<script type="text/javascript" src="/core/client/services/response.handler.js"></script>
+<script type="text/javascript" src="/core/client/services/errorhandler.client.service.js"></script>
+
+<script type="text/javascript" src="/core/client/controllers/delete-client.client.controller.js"></script>
+<script type="text/javascript" src="/core/client/controllers/add-client.client.controller.js"></script>
+<script type="text/javascript" src="/core/client/controllers/edit-client.client.controller.js"></script>
+<script type="text/javascript" src="/core/client/controllers/core.client.controller.js"></script>
+
+
+<script type="text/javascript" src="/campaigns/client/campaigns.client.module.js"></script>
+<script type="text/javascript" src="/campaigns/client/services/client.client.service.js"></script>
+<script type="text/javascript" src="/campaigns/client/services/campaigns.client.service.js"></script>
+<script type="text/javascript" src="/campaigns/client/controllers/campaigns.client.controller.js"></script>
+<script type="text/javascript" src="/campaigns/client/config/campaigns.client.routes.js"></script>
+<script type="text/javascript" src="/campaigns/client/controllers/add-campaign.client.controller.js"></script>
+<script type="text/javascript" src="/campaigns/client/controllers/edit-campaign.client.controller.js"></script>
+
+
+<script type="text/javascript" src="/campaign/client/campaign.client.module.js"></script>
+<script type="text/javascript" src="/campaign/client/config/campaign.client.routes.js"></script>
+<script type="text/javascript" src="/campaign/client/services/campaign.client.service.js"></script>
+<script type="text/javascript" src="/campaign/client/controllers/campaign.client.controller.js"></script>
+<script type="text/javascript" src="/campaign/client/services/navigation.client.service.js"></script>
+<script type="text/javascript" src="/campaign/client/services/stats.client.service.js"></script>
+
+
+<script type="text/javascript" src="/upload/client/upload.client.module.js"></script>
+<script type="text/javascript" src="/upload/client/config/upload.client.routes.js"></script>
+<script type="text/javascript" src="/upload/client/services/upload.client.service.js"></script>
+<script type="text/javascript" src="/upload/client/services/upload-file.client.service.js"></script>
+<script type="text/javascript" src="/upload/client/services/parser.client.service.js"></script>
+<script type="text/javascript" src="/upload/client/services/headers.client.service.js"></script>
+<script type="text/javascript" src="/upload/client/services/set-sources.client.service.js"></script>
+<script type="text/javascript" src="/upload/client/controllers/upload.ctrl.client.controller.js"></script>
+
+
+<script type="text/javascript" src="/download/client/download.client.module.js"></script>
+<script type="text/javascript" src="/download/client/controllers/download.ctrl.client.controller.js"></script>
+<script type="text/javascript" src="/download/client/services/download.client.service.js"></script>
+<script type="text/javascript" src="/download/client/services/set-file-details.client.service.js"></script>
+
+
+<script type="text/javascript" src="/sources/client/sources.client.module.js"></script>
+<script type="text/javascript" src="/sources/client/services/sources.client.service.js"></script>
+<script type="text/javascript" src="/sources/client/services/sourcemaps.client.service.js"></script>
+<script type="text/javascript" src="/sources/client/controllers/sources.ctrl.client.controller.js"></script>
+
+
+<script type="text/javascript" src="/header/client/header.client.module.js"></script>
+<script type="text/javascript" src="/header/client/controllers/header.ctrl.client.controller.js"></script>
+<script type="text/javascript" src="/header/client/services/header.client.service.js"></script>
+
+
+<script type="text/javascript" src="/lists/client/lists.client.module.js"></script>
+<script type="text/javascript" src="/lists/client/controllers/lists.ctrl.client.controller.js"></script>
+<script type="text/javascript" src="/lists/client/controllers/delete-list.client.controller.js"></script>
+<script type="text/javascript" src="/lists/client/services/lists.client.service.js"></script>
+<script type="text/javascript" src="/lists/client/services/aggregate.formatter.client.service.js"></script>
+<script type="text/javascript" src="/lists/client/services/aggregate.query.creator.client.service.js"></script>
+
+
+<script type="text/javascript" src="/export/client/export.client.module.js"></script>
+<script type="text/javascript" src="/export/client/controllers/export.ctrl.client.controller.js"></script>
+<script type="text/javascript" src="/export/client/services/export.client.service.js"></script>
+<script type="text/javascript" src="/export/client/services/dataset.name.client.service.js"></script>
+
+
+<script type="text/javascript" src="/exclusion/client/exclusion.client.module.js"></script>
+<script type="text/javascript" src="/exclusion/client/controllers/exclusion.client.controller.js"></script>
+<script type="text/javascript" src="/exclusion/client/services/exclusion.client.service.js"></script>
+
+
+<script type="text/javascript" src="/files/client/files.client.module.js"></script>
+<script type="text/javascript" src="/files/client/controllers/files.ctrl.client.controller.js"></script>
+<script type="text/javascript" src="/files/client/services/files.client.service.js"></script>
+
+
+<script type="text/javascript" src="/searchrecords/client/search.records.client.module.js"></script>
+<script type="text/javascript" src="/searchrecords/client/config/search.records.client.routes.js"></script>
+<script type="text/javascript" src="/searchrecords/client/controllers/search.records.client.controller.js"></script>
+<script type="text/javascript" src="/searchrecords/client/services/search.records.client.service.js"></script>
+<script type="text/javascript" src="/searchrecords/client/services/record.formatter.client.service.js"></script>
+
+
+<script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="/bower_components/ng-csv/build/ng-csv.min.js"></script>
+<script type="text/javascript" src="/bower_components/js-xlsx/dist/xlsx.core.min.js"></script>
+<script type="text/javascript" src="/bower_components/js-xlsx/dist/jszip.js"></script>
+<script type="application/javascript" src="/bower_components/papaparse/papaparse.js"></script>
+<script type="application/javascript" src="/bower_components/angular-papaparse/dist/js/angular-PapaParse.js"></script>
+<script type="application/javascript" src="/bower_components/ng-file-upload/ng-file-upload.js"></script>
+<script type="application/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+
+
+
+
+

@@ -1,0 +1,22 @@
+<div style="padding:7px;">
+    <a><i class="glyphicon glyphicon-remove" style="float:right";  ng-click="vm.dismissModal()"></i></a>
+</div>
+<div style="padding:20px;">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="wide">Delete <small>{{vm.list.Name}}</small></h1>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-8">
+            <p>Are you sure you would like to delete this list?</p>
+        </div>
+        <div class="col-md-4">
+            <form>
+                <button class="btn btn-circle btn-lg" ng-click="vm.deleteList()"><i class="glyphicon glyphicon-ok"></i></button>
+                <button class="btn btn-circle btn-lg" ng-click="vm.dismissModal()"><i class="glyphicon glyphicon-remove"></i></button>
+            </form>
+        </div>
+    </div>
+</div>

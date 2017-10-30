@@ -1,0 +1,52 @@
+﻿<div style="padding:7px;">
+  <a><i class="glyphicon glyphicon-remove" style="float:right" ; ng-click="vm.closeModal()"></i></a>
+</div>
+<div style="padding:40px;">
+  <div class="row">
+    <div class="col-lg-11">
+      <h1 class="wide">Edit {{vm.source.FullName}} <small>{{vm.source.Provider}}</small></h1>
+    </div>
+  </div>
+  <hr />
+  <div class="row" ng-show="vm.error">
+    <p uib-alert class="alert alert-danger" style="text-align:center;" close="vm.closeAlert()">
+      {{vm.error.message}}
+    </p>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <form class="inline-form" name="sourceForm" ng-submit="vm.editSource(sourceForm)" novalidate>
+        <div class="col-lg-3 " ng-class="{'has-error' : sourceForm.name.$invalid && !sourceForm.name.$pristine}">
+          <label>Source Name</label>
+          <input class="form-control" name="name" placeholder="Please enter a Source Name" ng-model="vm.source.Name" required ng-pattern="/^(\w+(\s\w+)?)+$/"
+            ng-trim="true" style="text-transform:capitalize;">
+          <p ng-show="sourceForm.name.$invalid && !sourceForm.name.$pristine" class="help-block">Please enter only [a-z] Source Name </p>
+        </div>
+
+        <div class="col-lg-3 " ng-class="{'has-error' : sourceForm.type.$invalid && !sourceForm.type.$pristine}">
+          <label>Source Type</label>
+          <select class="form-control" ng-options="name for name in vm.types" ng-model="vm.source.Type"></select>
+          <p ng-show="sourceForm.type.$invalid && !sourceForm.type.$pristine" class="help-block"></p>
+        </div>
+        <div class="col-lg-3 " ng-class="{'has-error' : sourceForm.provider.$invalid && !sourceForm.provider.$pristine}">
+          <label>Provider</label>
+          <input class="form-control" name="provider" placeholder="Please enter a Source Provider" ng-model="vm.source.Provider" required
+            ng-pattern="/^([a-zA-z]+(\s[a-zA-z]+)?)+$/" ng-trim="true" style="text-transform:capitalize;">
+          <p ng-show="sourceForm.provider.$invalid && !sourceForm.provider.$pristine" class="help-block">Please enter only [a-z] Provider Name </p>
+        </div>
+        <div class="col-lg-2 " ng-class="{'has-error' : sourceForm.cost.$invalid && !sourceForm.cost.$pristine}">
+          <label>Source Cost</label>
+          <input class="form-control" name="cost" placeholder="$0.00" ng-model="vm.source.Cost" required ng-pattern="/^\d+(\.+\d+)?$/"
+            ng-trim="true">
+          <p ng-show="sourceForm.cost.$invalid && !sourceForm.cost.$pristine" class="help-block">Please enter a cost in the format $X.XX</p>
+        </div>
+
+        <div class="col-lg-1" style="padding-top: 15px;">
+          <button class="btn btn-circle btn-lg" ng-disabled="sourceForm.$invalid" type="submit"><i class="glyphicon glyphicon-ok"></i></button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+</div>

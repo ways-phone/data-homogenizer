@@ -1,0 +1,295 @@
+<section ng-controller="SourcesCtrl as vm">
+    <div class="spinner" ng-show="vm.isLoading">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    <!--Main Section -->
+    <div class="animate-show-hide" ng-hide="vm.isLoading">
+        <!--Side Bar -->
+        <div class="sidebar-wrapper" ng-class="{'sidebar-wrapper': !vm.hideMenu, 'sidebar-wrapper-small': vm.hideMenu}">
+            <ul class="sidebar-nav campaign-side">
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Upload" type="button" tooltip-class="tip" ng-click="vm.nav.upload(vm)" class="btn btn-default btn-circle btn-lg  sidebar-btn"><i class="glyphicon glyphicon-cloud-upload"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Download" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.download(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn "><i class="glyphicon glyphicon-cloud-download"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Lists" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.lists(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-folder-open"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Sources" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.sources(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-cog"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Stats" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.stats(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-stats"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Headers" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.headers(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-duplicate"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Export" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exports(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-share"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" ng-disabled="vm.modalStates.Files" uib-tooltip="Files" type="button" tooltip-class="tip"
+                        type="button" ng-click="vm.nav.files(vm)" class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-th-list"></i></button>
+                </li>
+                <li>
+                    <button tooltip-placement="bottom" uib-tooltip="Exclusions" type="button" tooltip-class="tip" type="button" ng-click="vm.nav.exclusion(vm)"
+                        class="btn btn-default btn-circle btn-lg sidebar-btn"><i class="glyphicon glyphicon-ban-circle"></i></button>
+                </li>
+            </ul>
+        </div>
+        <!--Header -->
+        <div class="row">
+            <div class=" col-md-12 ">
+                <div class="col-md-1">
+                    <button style="margin-top: 13px;" class="btn btn-lg btn-circle" ng-click="vm.hideMenu = !vm.hideMenu"><i class="glyphicon glyphicon-menu-hamburger"></i> </button>
+                </div>
+                <div class="col-md-8 ">
+                    <h1 class="wide" ng-show="vm.state.list"> Sources <small>{{vm.client.Acronym}} - {{vm.campaign.Name}}</small></h1>
+                    <h1 class="wide" ng-show="vm.state.editing"> Edit <small>{{vm.source.DisplayName}}</small></h1>
+                    <h1 class="wide" ng-show="vm.state.creating"> Create <small>New Source</small></h1>
+                    <h1 class="wide" ng-show="vm.state.overwrite"> Overwrite <small>{{vm.source.DisplayName}}</small></h1>
+                    <h1 class="wide" ng-show="vm.state.sourcemaps"> Edit Source Maps <small>{{vm.client.Acronym}} - {{vm.campaign.Name}}</small></h1>
+                    <div class="panel-group">
+                        <ol class="breadcrumb">
+                            <li><a href="#!/">Clients</a></li>
+                            <li><a href="#!/client/{{vm.client.Acronym}}">{{vm.client.Name}}</a></li>
+                            <li><a href="#!/{{vm.client.Acronym}}/{{vm.campaign.Path}}">{{vm.campaign.Name}}</a></li>
+                            <li class="active">Sources</li>
+                        </ol>
+                    </div>
+
+                </div>
+                <div class="col-md-3">
+                    <button tooltip-placement="bottom" uib-tooltip="Show Sources" type="button" tooltip-class="tip" type="button" class="btn btn-xl btn-circle"
+                        ng-click="vm.setState('list')"><i class=" glyphicon glyphicon-th-list "></i></button>
+                    <button tooltip-placement="bottom" uib-tooltip="Add New Source" type="button" tooltip-class="tip" type="button" class="btn btn-xl btn-circle"
+                        ng-click="vm.setState('creating')"><i class=" glyphicon glyphicon-plus "></i></button>
+                    <button tooltip-placement="bottom" uib-tooltip="Edit Source Maps" type="button" tooltip-class="tip" type="button" class="btn btn-xl btn-circle"
+                        ng-click="vm.setState('sourcemaps')"><i class=" glyphicon glyphicon-tags"></i></button>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <!--Success-->
+        <div class="row animate-show-hide" ng-show="vm.success">
+            <div class="col-md-12">
+                <div class="alert alert-success">
+                    {{vm.success}}
+                </div>
+            </div>
+        </div>
+        <!--Error-->
+        <div class="row animate-show-hide" ng-show="vm.error">
+            <div class="col-md-12 alert alert-danger">
+                {{vm.error}}
+            </div>
+        </div>
+        <!--List-->
+        <div class="row animate-show-hide " ng-show="vm.state.list ">
+            <form class="col-lg-2 col-lg-offset-10 ">
+                <input class="search-table form-control " ng-model="vm.search " placeholder="Search... " />
+            </form>
+            <div class="col-lg-12 " style="overflow: auto; ">
+                <table class=" editable-table table-hover ">
+                    <thead>
+                        <tr>
+                            <th ng-click="vm.sort( 'Name') " class="wide ">
+                                Name
+                                <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Name' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                            </th>
+                            <th ng-click="vm.sort( 'Type') " class="wide ">
+                                Type
+                                <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Type' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                            </th>
+                            <th ng-click="vm.sort( 'Provider') " class="wide ">
+                                Provider
+                                <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Provider' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                            </th>
+                            <th ng-click="vm.sort( 'Cost') " class="wide ">
+                                Cost
+                                <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Cost' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                            </th>
+                            <th ng-click="vm.sort( 'Updated') " class="wide ">
+                                Updated
+                                <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Updated' " ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                            </th>
+                            <th class="wide ">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="source in vm.campaign.Sources|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:5 ">
+                            <td>{{source.Name}}</td>
+                            <td>{{source.Type}}</td>
+                            <td>{{source.Provider}}</td>
+                            <td>${{source.Cost}}</td>
+                            <td>{{source.timestamp.updated}}</td>
+                            <td>
+                                <button class="btn-default btn-circle btn-md " ng-click="vm.showEdit(source)"><i class="glyphicon glyphicon-pencil "></i></button>
+                                <button class="btn-default btn-circle btn-md " ng-click="vm.showOverwrite(source) "><i class="glyphicon glyphicon-warning-sign "></i></button>
+                                <button class="btn-default btn-circle btn-md " ng-click="vm.deleteCampaignModal(source._id) "><i class="glyphicon glyphicon-trash "></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-12 ">
+                <dir-pagination-controls max-size="5 " direction-links="true " boundary-links="true "></dir-pagination-controls>
+            </div>
+        </div>
+        <!--Edit-->
+        <div class="row animate-show-hide " ng-show="vm.state.editing ">
+            <div class="col-lg-4 col-lg-offset-4 ">
+                <form name="sourceForm " ng-submit="vm.editSource(sourceForm) " novalidate>
+                    <div class="col-lg-12 input-group " ng-class="{ 'has-error' : sourceForm.name.$invalid && !sourceForm.name.$pristine} ">
+                        <label>Source Name</label>
+                        <input class="form-control " name="name " placeholder="Please enter a Source Name " ng-model="vm.source.Name " required ng-pattern="/^(\w+(\s\w+)?)+$/ "
+                            ng-trim="true " style="text-transform:capitalize; ">
+                        <p ng-show="sourceForm.name.$invalid && !sourceForm.name.$pristine " class="help-block ">Please enter only [a-z] Source Name </p>
+                    </div>
+
+                    <div class="col-lg-12 input-group " ng-class="{ 'has-error' : sourceForm.type.$invalid && !sourceForm.type.$pristine} ">
+                        <label>Source Type</label>
+                        <select class="form-control " ng-options="name for name in vm.types " ng-model="vm.source.Type "></select>
+                        <p ng-show="sourceForm.type.$invalid && !sourceForm.type.$pristine " class="help-block "></p>
+                    </div>
+                    <div class="col-lg-12 input-group " ng-class="{ 'has-error' : sourceForm.provider.$invalid && !sourceForm.provider.$pristine} ">
+                        <label>Provider</label>
+                        <input class="form-control " name="provider " placeholder="Please enter a Source Provider " ng-model="vm.source.Provider "
+                            required ng-pattern="/^([a-zA-z]+(\s[a-zA-z]+)?)+$/ " ng-trim="true " style="text-transform:capitalize; ">
+                        <p ng-show="sourceForm.provider.$invalid && !sourceForm.provider.$pristine " class="help-block ">Please enter only [a-z] Provider Name </p>
+                    </div>
+                    <div class="col-lg-12 input-group " ng-class="{ 'has-error' : sourceForm.cost.$invalid && !sourceForm.cost.$pristine} ">
+                        <label>Source Cost</label>
+                        <input class="form-control " name="cost " placeholder="$0.00 " ng-model="vm.source.Cost " required ng-pattern="/^\d+(\.+\d+)?$/ "
+                            ng-trim="true ">
+                        <p ng-show="sourceForm.cost.$invalid && !sourceForm.cost.$pristine " class="help-block ">Please enter a cost in the format $X.XX</p>
+                    </div>
+
+                    <div class="col-lg-12 input-group " style="padding-top: 15px; ">
+                        <button class="btn btn-danger form-control " ng-disabled="sourceForm.$invalid " type="submit "><i class="glyphicon glyphicon-ok "></i></button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <!--Create-->
+        <div class="row check-element animate-show-hide" ng-show="vm.state.creating">
+            <div class="col-md-12 col-md-offset-4">
+                <form class="" name="sourceForm" ng-submit="vm.addSource(sourceForm)" novalidate>
+                    <div class="col-lg-4 input-group" ng-class="{'has-error' : sourceForm.name.$invalid && !sourceForm.name.$pristine}">
+                        <label>Source Name</label>
+                        <input class="form-control" name="name" placeholder="Please enter a Source Name" ng-model="vm.source.Name" required ng-pattern="/^(\w+(\s\w+)?)+$/"
+                            ng-trim="true" style="text-transform:capitalize;">
+                        <p ng-show="sourceForm.name.$invalid && !sourceForm.name.$pristine" class="help-block">Please enter only [a-z] Source Name </p>
+                    </div>
+
+                    <div class="col-lg-4 input-group" ng-class="{'has-error' : sourceForm.type.$invalid && !sourceForm.type.$pristine}">
+                        <label>Source Type</label>
+                        <select class="form-control" ng-options="name for name in vm.types" ng-model="vm.source.Type">
+          </select>
+                        <p ng-show="sourceForm.type.$invalid && !sourceForm.type.$pristine" class="help-block"></p>
+                    </div>
+                    <div class="col-lg-4 input-group" ng-class="{'has-error' : sourceForm.provider.$invalid && !sourceForm.provider.$pristine}">
+                        <label>Provider</label>
+                        <input class="form-control" name="provider" placeholder="Please enter a Source Provider" ng-model="vm.source.Provider" required
+                            ng-pattern="/^([a-zA-z]+(\s[a-zA-z]+)?)+$/" ng-trim="true" style="text-transform:capitalize;">
+                        <p ng-show="sourceForm.provider.$invalid && !sourceForm.provider.$pristine" class="help-block">Please enter only [a-z] Provider Name </p>
+                    </div>
+                    <div class="col-lg-4 input-group" ng-class="{'has-error' : sourceForm.cost.$invalid && !sourceForm.cost.$pristine}">
+                        <label>Source Cost</label>
+                        <input class="form-control" name="cost" placeholder="$0.00" ng-model="vm.source.Cost" required ng-pattern="/^\d+(\.+\d+)?$/"
+                            ng-trim="true">
+                        <p ng-show="sourceForm.cost.$invalid && !sourceForm.cost.$pristine" class="help-block">Please enter a cost in the format $X.XX</p>
+                    </div>
+
+                    <div class="col-lg-4 input-group" style="padding-top: 15px;">
+
+                        <p uib-alert ng-show="vm.error" class="alert alert-danger" close="vm.closeAlert()">
+                            {{vm.error.message}}
+                        </p>
+                        <button class="btn btn-danger form-control" ng-disabled="sourceForm.$invalid" type="submit"><i class="glyphicon glyphicon-plus"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--Overwrite-->
+        <div class="row check-element animate-show-hide" ng-show="vm.state.overwrite">
+            <div class="col-md-8 col-md-offset-2">
+                <form>
+                    <div class="input-group col-lg-4 col-md-offset-4">
+                        <label>From Date: </label>
+                        <p class="input-group">
+                            <input ng-change="vm.setDates()" type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="vm.start" is-open="vm.datepicker.popup1.opened"
+                                datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats"
+                            />
+                            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="vm.datepicker.open(vm.datepicker.popup1)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                        </p>
+                    </div>
+                    <div class="input-group col-lg-4 col-md-offset-4">
+                        <label>To Date: </label>
+                        <p class="input-group">
+                            <input ng-change="vm.setDates()" type="text" class="form-control" uib-datepicker-popup ng-model="vm.end" is-open="vm.datepicker.popup2.opened"
+                                datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+                            <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.datepicker.open(vm.datepicker.popup2)"><i class="glyphicon glyphicon-calendar"></i></button>
+              </span>
+                        </p>
+                    </div>
+                    <div class="input-group col-md-4 col-md-offset-4">
+                        <button class="btn btn-danger form-control" ng-click="vm.overwriteCost()" ng-disabled=""><i class="glyphicon glyphicon-warning-sign"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--sourcemaps-->
+        <div class="row animate-show-hide" ng-show="vm.state.sourcemaps">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-4">
+                    <form>
+                        <div class="input-group">
+                            <label class="wide">Sources</label>
+                            <select class="form-control" ng-change="vm.displayMaps()" ng-model="vm.source" ng-options="source as source.DisplayName for source in vm.sources"></select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <hr/>
+            <div class="row" ng-show="vm.maps">
+                <div class="col-md-12">
+                    <table class="editable-table table-hover">
+                        <thead>
+                            <tr>
+                                <th ng-click="vm.sort('Name')" class="wide">
+                                    Name
+                                    <span class="glyphicon sort-icon " ng-show="vm.sortKey==='Name'" ng-class="{ 'glyphicon-chevron-up':vm.reverse, 'glyphicon-chevron-down':!vm.reverse} "></span>
+                                </th>
+                                <th class="wide">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="map in vm.maps|orderBy:vm.sortKey:vm.reverse|filter:vm.search|itemsPerPage:5 track by $index">
+                                <td>{{map.Name}}</td>
+                                <td>
+                                    <button class="btn btn-circle btn-lg" ng-click="vm.deleteMap(map._id)"><i class="glyphicon glyphicon-remove"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

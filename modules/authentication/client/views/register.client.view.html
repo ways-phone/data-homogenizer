@@ -1,0 +1,31 @@
+<section ng-controller="RegisterController as vm">
+  <div class="row">
+    <div class="col-lg-4 col-lg-offset-4">
+      <form>
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" class="form-control" ng-model="vm.user.FirstName" placeholder="Please Enter Your First Name" />
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" class="form-control" ng-model="vm.user.LastName" placeholder="Please Enter your Last Name" />
+        </div>
+        <div class="form-group">
+          <label>Department</label>
+          <select ng-model="vm.user.Department" ng-options="dep for dep in vm.departments">
+              <option value="">Please Select a Department</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="text" class="form-control" ng-model="vm.user.Email" placeholder="Please Enter your Email" />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" ng-model="vm.user.Password" placeholder="Please Enter your Password" />
+        </div>
+        <button ng-click="vm.register()" class="form-control" class="btn btn-enter">Register</button>
+      </form>
+    </div>
+  </div>
+</section>

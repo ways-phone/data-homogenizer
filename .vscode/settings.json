@@ -1,0 +1,6 @@
+{
+    "vsicons.presets.angular": false,
+    "editor.tabCompletion": true,
+    "editor.snippetSuggestions": "inline",
+    "editor.formatOnSave": true
+}
